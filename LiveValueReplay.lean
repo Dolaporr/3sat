@@ -77,4 +77,23 @@ theorem sensitive_pin_is_read {Addr : Type} (tree : Tree Addr) (pin : Addr)
   intro a ha
   exact offPin _ (fun h => absent (h ▸ ha))
 
+/-- After fixing the public certificate, every pivotal bit is inspected on
+    some challenge for any choice of accepting private replies. -/
+theorem alternating_challenges_cover_pin {Addr Challenge Reply : Type}
+    (test : Challenge → Reply → Tree Addr) (chosen : Challenge → Reply)
+    (left right : Addr → Bool) (pin : Addr)
+    (offPin : ∀ a, a ≠ pin → left a = right a)
+    (accepts : ∀ u, (test u (chosen u)).eval left = true)
+    (rejects : ¬ ∀ u, ∃ v, (test u v).eval right = true) :
+    ∃ u, pin ∈ (test u (chosen u)).reads left := by
+  classical
+  apply Classical.byContradiction
+  intro uncovered
+  apply rejects
+  intro u
+  refine ⟨chosen u, ?_⟩
+  by_cases same : (test u (chosen u)).eval left = (test u (chosen u)).eval right
+  · exact same.symm.trans (accepts u)
+  · exact False.elim (uncovered ⟨u, sensitive_pin_is_read _ _ _ _ offPin same⟩)
+
 end LiveValueReplay
