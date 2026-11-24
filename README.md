@@ -6,6 +6,12 @@ The first target is to rule out a uniform deterministic **O(n)** worst-case algo
 
 We use binary-encoded literal indices, a conventional explicit formula encoding, words of Θ(log n) bits with a constant sufficient for the polynomial address range in use, and a fixed instruction set with ordinary word arithmetic, Boolean operations, and indirect reads and writes. Word operations have polylogarithmic-size Boolean implementations. Exact timing statements about promise families identify their encoding. A hard family of explicit width-three instances in this encoding would suffice for the general SAT target. Each target excludes the stated big-O bound. A matching big-Omega bound alone is compatible with it.
 
+## How long do opposite SAT verdicts take on the same clause layout?
+
+At every sufficiently large scale a uniform generator gives pairs of $n$-bit 3-CNFs. Exactly one member of each pair has a satisfying assignment, and that assignment is unique. Across the whole list only $O(\log\log n)$ designated literal signs vary. For every fixed correct deterministic SAT solver, **both members of all but a solver-dependent constant number of pairs take more than $n/\operatorname{polylog} n$ steps**. The index and the locations of the varying signs can be given to the solver. The proof also bounds how many pairs a sound shortcut with shared advice can answer, with a converse for the overhead of supporting many advice lengths. Under an explicit padding choice, one globally correct solver recognizes and decides every family member in $O(n/\log n)$ steps. [Proof, advice bounds and exact clock](shortcut-capital.md) · [Lean mass argument](ShortcutCapital.lean)
+
+A second construction allows a long shared random input and measures how many distinct bits of it a predictor reads after receiving advice. With $2^b$ selectors and a fixed polynomial work allowance in $2^b$, an inverse-polynomial advantage in $b$ requires the product of advice length (plus $b+1$) and distinct bit probes (plus one) to exceed $2^b/\operatorname{poly}(b)$ on almost every public tape at infinitely many scales. Here $b\le\log_2 n\le b^{O(1)}$. Other entries bound the information retained at a cut in an actual SAT run, verify RAM loads using a forward permutation, and extract the formal permanent under explicit restrictions on its degree-two Boolean representative. [Shared public inputs](semantic-public-tapes.md) · [Sharp moment estimates](semantic-moment-transfer.md) · [Cut information](semantic-cut-permutations.md) · [RAM load verification](succinct-claw-checkpoints.md) · [Degree-two extraction](symmetric-cube-slices.md)
+
 ## Can the same formulas test every solver?
 
 At every sufficiently large scale, an unconditional construction gives a list of $O(\log n)$ equal-length 3-CNFs. Its first unsatisfiable member defeats every sound nondeterministic rejection certifier in a growing program pool within $n/\operatorname{polylog} n$ steps, even with the list index supplied. The shortest list that could do this has the same order in the pool size. Under a linear-time SAT hypothesis, on that same member *every* fixed correct near-linear solver has cumulative locally decodable snapshot length at least $n^2/\operatorname{polylog}n$, with a decoder-dependent log power. [List construction, finite matching and selection cost](first-missing-certificate-level.md) · [Lean proof](FirstMissingCertificateLevel.lean)
@@ -396,6 +402,16 @@ The individual notes distinguish literature precedents, elementary deductions, f
 Use Lean 4.19.0 with its bundled Std library and Python 3.11 or later. The finite permanent-grid and matching experiments use SymPy. The independent singleton optimization check uses NumPy and SciPy. Run from the repository root.
 
 ```sh
+lean ShortcutCapital.lean
+lean SemanticSampling.lean
+lean SemanticCutPermutations.lean
+lean SuccinctClaw.lean
+lean SymmetricCubeSlices.lean
+python3 shortcut_capital_audit.py
+python3 public-tape-semantic-audit.py
+python3 semantic_cut_permutation_audit.py
+python3 succinct-claw-audit.py
+python3 symmetric-cube-slices-check.py
 lean CascadeSnapshotErrors.lean
 lean OnlineDecoderClock.lean
 python3 partial_domain_snapshot_audit.py
