@@ -4,6 +4,8 @@
 
 Paul, Pippenger, Szemerédi and Trotter discussed the possibility of linear-size grates on two-dimensional tapes. They distinguished grates from the linear-size two-dimensional superconcentrators already known. Klawe previously amplified robust paths by replacing vertices with sets and edges with expanders. The construction below uses that principle, with a bounded-degree outer grate and lane permutations that two planar heads can traverse in linear time. Priority for the tape realization has not been established. [PPST, §§2, 5](https://trotter.math.gatech.edu/papers/34.pdf) · [Klawe, *Shallow Grates*](https://www.cs.ubc.ca/sites/default/files/tr/1992/TR-92-03.pdf)
 
+The follow-up construction implements the transfers with a single writable line alongside the plane. A matching positive result gives sublinear segregators when all auxiliary lines together visit $o(\sqrt T)$ cells in $T$ steps. [Mixed-tape threshold and bounded-round pebble game](mixed-tape-pebble-frontier.md)
+
 ## Amplifying an outer grate
 
 Use Schnitger's family of acyclic graphs with $s$ inputs, $s$ outputs, $O(s)$ vertices and bounded indegree $\Delta\ge2$. Some $c,\eta>0$ work at every family size. After deletion of at most $cs$ vertices, at least $\eta s^2$ input-output pairs remain connected. Set $q=\lceil\sqrt s\rceil$ and $m=q^2$. Make a copy of the lane set $[m]$ at every vertex. Along each outer edge put the same bipartite regular graph on its two lane sets. [Schnitger, *On depth-reduction and grates*](https://doi.org/10.1109/SFCS.1983.38) · [Blocki and Cinkoske, §3.1, formulation with bounded indegree](https://par.nsf.gov/servlets/purl/10200741)

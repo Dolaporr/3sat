@@ -2,6 +2,12 @@
 
 **24 November 2026.** An unconditional exclusion of deterministic linear time for ordinary explicit SAT on a logarithmic-word RAM with unrestricted workspace is the first milestone. The full objective requires a quadratic- or cubic-time exclusion. The project has no proof of any of those exclusions.
 
+## Current working milestone
+
+Use the native unary-clock language to target $\mathrm{NTIME}_{\rm RAM}[n]\ne\mathrm{DTIME}_{\rm RAM}[n]$. Its bounded-acceptance verifier takes linear time on the stated word RAM. On this complete problem the memory lower bound reaches $\Omega(n)$ bits in occupied nonzero words on inputs of each verdict at every sufficiently large length. The unrestricted allowance is $O(n\log n)$ bits. The explicit SAT objectives above retain the encoded formula length as their parameter. [Native theorem and proof](native-unary-clock-band.md)
+
+The existing snapshot transfer excludes the strict exponent region $e+d<1$ at linear solver time. Storing or replaying a state attains its frontier on the inverse-permutation family. Freeze that tradeoff as a search direction unless a new argument uses a property of SAT missing from that family. The next diagonal test charges the choice bits actually carried across alternation switches. It suffices to speed up the diagonal correctly on arbitrarily long extensions of each fixed opponent-program prefix. For linear SAT the encoded lengths of the nested calls impose additional logarithmic factors. A recursive Boolean oracle, even with its canonical multilinear extension available to the source machine, makes native alternating linear time deterministic in the specified oracle model. A proof transferring to that model cannot give the separation. [Reviewed master theorem](computation-history-theorem.md) · [Exponent frontier](inverse-snapshot-frontier.md) · [Speedup criterion](alternating-native-speedup.md) · [Mixed-oracle construction](multilinear-oracle-clock.md)
+
 ## What counts as progress on the lower bound
 
 A results entry should name an unconditional theorem that the proposed fast solver would contradict, specify the machines and input encoding quantified over, and prove an implication for **every** solver in its stated scope. It should give the simulation costs where they enter the contradiction. Put restricted models and remaining premises in the statement. Record a finite experiment, conditional reformulation or failed proof as research history; none counts as an unrestricted time lower bound. Scope a Lean claim to the definitions and lemmas it actually checks.
