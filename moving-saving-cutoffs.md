@@ -1,0 +1,34 @@
+# A computably moving interval of exact description lengths
+
+**Research journal, 24 November 2026.** Let V be any fixed efficient optimal native prefix interpreter, T(m)=2^(3m), and tₐ(m)=max(1,⌊T(m)/mᵃ⌋). Take any fixed algorithm computing an integer L(m) between 1 and m in poly(m) time. At lengths m=2ʳ assume eventually L(m)≥2⌈log₂(r+2)⌉. The cutoff can otherwise oscillate arbitrarily. Under deterministic linear time for explicit SAT on the unrestricted logarithmic-word RAM, there are constants a₀ and h and a single integer i between 1 and h such that, for every a≥a₀, the following sum is Martin-Löf random:
+
+    Σ_{y : |y|=2ʳ for some r, K_T(y)=L(|y|)−i}
+          (2^(−K_T(y))−2^(−K_tₐ(y))).                                 (1)
+
+Here K is ordinary prefix complexity on V, Kₜ is its clocked counterpart, and 2^(−∞)=0. Infinitely many of the terms have K(y)>L(m)−h−1, K_T(y)<L(m)≤K_tₐ(y). The constants may depend on V and the algorithm for L. This is a moving column of the ordinary exact-saving table: its output-length saving is m−L(m)+i. It includes cutoffs in the middle of the description-length range and cutoffs alternating between widely separated values. The proof uses one length per grant.
+
+## A whole grant at a single length
+
+Use a separate optimal prefix machine U₀. Assign a halting name p, with its halt time, to a computably invertible index r≥6+3(|p|+time(p)+1), with the forward computation polynomial in r. Set wᵣ=2^(−|p|) on that index and zero elsewhere. These computable terms sum to Ω₀. Write u(r) for a universal discrete lower semicomputable semimeasure. On an infinite set R, wᵣ≥δu(r) for some δ>0 by the random-series term test. There u(r)≥c/[r(log(r+2))²], so |p|≤log₂r+2log₂log₂(r+2)+O(1). The stated lower bound on L(2ʳ) eventually pays |p| and any constant on R. [Construction of the phase weights](one-bit-production.md) · [Bienvenu and Shen, Theorem 13](https://arxiv.org/pdf/1110.5028)
+
+A fixed V decoder reads p, obtains r, sets m=2ʳ and computes L=L(m). Choose a constant c large enough to pay this fixed interpreter and decoder prefix. Equivalently supply c as a self-delimiting parameter and choose it greater than the header plus the parameter's own length. For L≥|p|+c it takes a raw lexicographic rank of L−|p|−c bits and emits that ranked word among the m-bit words absent by tₐ₀(m) on all names of length <L. Distinct ranks give distinct words. There are at least 2ᵐ−2^(L−1) missing, since at most 2^(L−1) distinct words can have a prefix-free name shorter than L. This exceeds or equals 2^(L−|p|−c), including L=m. Every constructed name has length <L.
+
+For a proposed binary prefix, count the already produced words below it by asking whether at least k distinct m-bit words have been produced. Existentially guess their sorted list, universally select a row and existentially certify one exact native run of a name of length <L by the early deadline. The list takes O(m2ᵐ) bits even at L=m, and the native computation requires one bounded transcript in the matrix. Binary search for the count and bitwise unranking use polynomially many such tests. Under linear SAT, fixed-block elimination and native simulation cost at most (2ᵐ+tₐ₀(m))poly(m) altogether. Integer clock construction treats the exponent as a numeric parameter and the fixed polynomial overhead exponent can be chosen independently of a₀. Taking a₀ sufficiently large makes this cost at most T(m) eventually. The supplied p halts within r steps, while m=2ʳ. The decoder only queries the early table at this one length. Changes of L between successive lengths have no effect on its runtime. [Bounded native computations](near-clock-credits.md) · [Fixed-block elimination](linear-quantifiers.md)
+
+In units 2^(−L) per word, this decoder thus produces 2^(−c)wᵣ mass at m whenever the rank field fits and the clock holds. Put
+
+    B_H(r) = 2^(−L(2ʳ)) · #{y of length 2ʳ with K(y)≤L(2ʳ)−H},
+
+interpreting a negative complexity cutoff as giving the empty set. The sum over r is at most 2^(−H) by Kraft, since each word has just one length. The row masses are uniformly lower semicomputable, hence mixing 2ᴴ B_H(r) over H with weights proportional to (H+1)⁻² gives B_H(r)≤C(H+1)²2^(−H)u(r). Choose H so this is less than half the decoder's mass on R, and set h=H−1. At arbitrarily large lengths there is a paid word with
+
+    L−H < K(y) ≤ K_T(y) < L ≤ K_tₐ₀(y).
+
+Some i=L−K_T(y) in {1,…,h} recurs infinitely often. Each corresponding term is at least 2^(−H−1)2^(−K(y)). The terms of (1) are computable rational numbers and their sum is finite by Kraft. The same term criterion gives the claimed randomness, which persists when a increases by monotonicity of the positive differences. Extending the sum to all lengths preserves these tight terms.
+
+If L(m)=O(log m) on the powers of two, this assertion already holds **unconditionally** with the stated lower growth condition. Directly enumerate fewer than 2ᴸ earlier names, simulate each through tₐ₀(m), and sort their outputs. The total is 2ᴸ(tₐ₀(m)+1)poly(m), which fits T(m) for a sufficiently large fixed a₀. Recover the desired missing word by binary prefix counts in this sorted list. The same grant and Kraft estimates apply. An independently sufficient criterion for a SAT separation would therefore need to exploit the range where this enumeration is too expensive.
+
+## Can a sparse fallback normalize a growing forbidden interval?
+
+For an inexpensive explicit cohort there is a finite obstruction. Suppose a native compiler supplies 2ᵏ distinct words of one length by T, each with name length ≤k+e+c. Here e bits identify the cohort and k independent raw bits distinguish its outputs. If the greatest permitted name length ≤k+e+c is b<k, at most 2ᵇ cohort words can ever have a permitted name that short, by prefix-freeness. Thus a fraction at least 1−2^(b−k) evades any rule that normalizes *all* timely shortest names to permitted lengths. The whole cohort may use only 2^(−e−c) of the fallback's code space if the names all have the displayed length. Small absolute fallback mass does not change the counting inequality. This observation alone does not force a change between the two clocks; a fast literal encoder can already describe all cohort words.
+
+For a changing modulus M(m)→∞ with 2≤M(m)≤m and a poly(m)-time computation, take L(m)=m−⌊M(m)/2⌋. Formula (1) under linear SAT forces a random subseries at savings ⌊M(m)/2⌋+i for some fixed i. These savings eventually lie strictly between 0 and M(m). A fixed machine on which the total two-clock increment outside the permitted multiples of M(m) is nonrandom for arbitrarily large fixed a would contradict this. Indeed the computable nonnegative subseries (1) retains infinitely many tight terms after deleting finitely many words, and so does the full off-residue sum. The [fixed-modulus compiler](exact-saving-blocks.md) supplies no such increasing-modulus source.

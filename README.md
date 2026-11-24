@@ -8,7 +8,9 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
-The latest linear-SAT test can be stated using only shortest program lengths at two clocks. For each word, measure how much its best description improves when the deadline grows by a polynomial factor. Under linear SAT the sum of these improvements over words whose best descriptions are within ⌈log₂ log₂ m⌉ bits of their length m must be algorithmically random, with the precise weighting below. The argument also forces random sums at particular fixed description-length savings, with gaps of at most logarithmic size between them. Showing sufficiently large gaps would suffice. Removing the length restriction makes the sum random unconditionally, by an explicit family of short programs. [Clocked complexity increments](clocked-complexity-increments.md)
+A fixed additive gap now suffices for one test of the linear-time target. For each output word of length m, record how many bits its shortest program saves over m at a late deadline. Under the linear-SAT hypothesis the two-clock sum must be algorithmically random for at least one saving in every H consecutive savings, for a constant H depending on the machine. A single efficient universal machine with arbitrarily long gaps would therefore rule out O(n) time for SAT. I constructed machines with any prescribed fixed gap size, and even prescribed bounded-gap patterns indexed by enumerable processes. The construction still needs a finite bound on each machine’s gaps. [Conditional constant-gap bound](exact-saving-blocks.md) · [Which patterns a machine can realize](programmable-clock-spectrum.md)
+
+A related linear-SAT test can be stated using only shortest program lengths at two clocks. For each word, measure how much its best description improves when the deadline grows by a polynomial factor. Under linear SAT the sum of these improvements over words whose best descriptions are within ⌈log₂ log₂ m⌉ bits of their length m must be algorithmically random, with the precise weighting below. The argument also forces random sums at particular fixed description-length savings, with gaps of at most logarithmic size between them. Showing sufficiently large gaps would suffice. Removing the length restriction makes the sum random unconditionally, by an explicit family of short programs. [Clocked complexity increments](clocked-complexity-increments.md)
 
 On a constructed optimal prefix machine, a positive fraction by weight of selected words have a shortest program of exactly m−1 bits whose earliest completion takes between 2^(3m) and 2^(5m) steps. An m-bit program prints each of the same words in quasilinear time. This is unconditional. Under linear SAT the slow endpoint can be confined to a polynomial factor of a prescribed deadline. A second test on a single fixed machine lets the required description-length saving grow with the phase. [One additional description bit](one-bit-production.md) · [Growing description-length savings](varying-description-savings.md)
 
@@ -68,6 +70,12 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Agreement at every rational exponential deadline](rational-clock-agreement.md) | Two machines can agree on the timely status of every name at every fixed rational rate eventually, while differing on all odd savings within the last polynomial factor of each deadline in (3,4). |
+| [Prescribing which exact savings have random increments](programmable-clock-spectrum.md) | Two machines can agree on every program’s output and on all sufficiently late integer-rate outer complexities while disagreeing at every odd saving. A separate construction realizes any uniformly bounded-gap Π⁰₂ pattern. |
+| [Constant-width intervals of description savings](exact-saving-blocks.md) | Linear SAT would force random increments in some column in every constant-width interval. The bound holds in each fixed polynomial-ratio clock interval. A separate residual randomness result is unconditional. |
+| [Description savings relative to a moving cutoff](moving-saving-cutoffs.md) | Under linear SAT, a timely computable program-length cutoff on powers of two has a random increment sum at a fixed bounded offset. Short cutoffs allow direct enumeration unconditionally. |
+| [Continuously varying the deadline](continuum-saving-rates.md) | Under linear SAT, almost every individual rate in [3,4] has infinitely many witnesses in every interval of a fixed sufficiently large number of savings. Integrating over rates gives a computable-series test. |
+| [Estimating early program outputs from the payload](sampled-prefix-mass.md) | One payload can estimate early prefix probabilities and still appear in the output. A fixed-point obstruction explains why a distribution-free selection rule cannot guarantee a lightly occupied group of tags. |
 | [A series over words at two clocks](clocked-complexity-increments.md) | Linear SAT would force randomness of the clock-increment sum even for almost incompressible words. Dropping the length band gives unconditional randomness via simple diagonal words. |
 | [The fastest shortest program and one more bit](one-bit-production.md) | A prefix-universal source has many words with an exponentially slow shortest description and a quasilinear description just one bit longer. Changing the padding rule gives an upper bound but costs the compiler the same saving. |
 | [Increasing the required program-length saving](varying-description-savings.md) | The word masses at all savings D, scaled by 2^D, are jointly summable. Linear SAT would still force a positive normalized share near a fixed deadline at any timely selected D=g(r)≤r/3. |
@@ -254,6 +262,9 @@ lean DelayedPrefixCover.lean
 lean ExceptionalBands.lean
 lean TimeByLength.lean
 lean OneBitProduction.lean
+lean ClockSpectrum.lean
+lean ResidueHeaders.lean
+lean ContinuumSavingRates.lean
 lean TailCapacity.lean
 lean StaggeredRelease.lean
 lean RateBinCredits.lean
@@ -266,6 +277,7 @@ lean AnonymousOmissions.lean
 lean ExclusiveOwner.lean
 lean ParityFibers.lean
 python3 one_bit_production_experiment.py
+python3 rational_clock_experiment.py
 python3 word_completion_experiment.py
 python3 suffix_image_experiment.py
 python3 window_lists_experiment.py
