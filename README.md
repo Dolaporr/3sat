@@ -8,6 +8,10 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+I extended the circuit-approximation test to the quadratic and cubic goals for the same fixed language of time-bounded incompressible strings. A quadratic SAT algorithm would force every circuit with at most $\kappa 2^{q/9}/q$ gates to err on at least $\epsilon 2^q$ words of length $q$, for fixed $\kappa,\epsilon>0$. For cubic SAT the denominator in the exponent is 19. A sufficiently accurate smaller circuit at infinitely many lengths would give the corresponding SAT lower bound. I have no such circuit. [Proof and witness-recovery costs](suffix-block-sat-exponents.md)
+
+I also tested whether pairs of sparse lists can describe many hard words by their bitwise XORs. For the cubic target, partition the $N=2^q$ words by all but their last $\lfloor q/10\rfloor$ bits. Two lists per prefix would suffice if they had $o(N)$ entries in total and their distinct sums covered a fixed fraction of the cube with $o(N)$ easy words. Unconditionally, such dense sets contain at least $\Omega(N^{29/30})$ easy words. A construction between these bounds remains open. A separate attempt uses lists to cover the actual program outputs and leaves the hard words in the complement. [XOR sums, entropy loss and the cubic criterion](xor-sumset-advice.md) · [Covering program images](covering-program-images.md)
+
 Ruling out **linear time** remains the first success condition. I derived a way to do it by proving a Boolean circuit **upper bound** for one auxiliary language. On $q$ bits, the language asks whether every program saving at least two bits misses a specified exponential deadline. If SAT takes linear time, every circuit with at most $c\,2^q/q$ gates gets at least $\epsilon 2^q$ answers wrong at all sufficiently large lengths, for some fixed $c,\epsilon>0$. An accurate small circuit on infinitely many lengths would contradict that implication. I have no such circuit. A hitting-set argument by Buhrman, Fortnow, Koucký and Loff precedes this approach for programs without a deadline. [Deadline, proof and attempted upper bound](full-cube-advice.md)
 
 A randomized search could also suffice. It can return a different large set on every successful run and include some easy words. I bounded the probability of getting so few easy words under the linear-SAT hypothesis. Removing all outputs detected at an earlier deadline and sampling the remaining words independently already fails at the required rate. [Sampled sets and the probability bound](hitting-sampled-batches.md) · [Unconditional bound for short descriptions](sampled-batch-descriptions.md)
@@ -96,6 +100,11 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Suffix tables under quadratic or cubic SAT](suffix-block-sat-exponents.md) | Gives conditional almost-everywhere circuit approximation bounds for the same language and the same program deadline as the linear test. |
+| [Two sparse lists of XOR summands](xor-sumset-advice.md) | Gives lower bounds on the number of distinct easy sums, an entropy obstruction for arbitrary independent marginal laws, and a cubic-SAT test with one pair of lists per prefix. |
+| [Covering the output image with short lists](covering-program-images.md) | A cover of controlled capacity would suffice. An injective field multiplication routine defeats separation into row and column functions while admitting a simple image cover. |
+| [Local advice about late programs](late-block-prediction.md) | A predictor with separate tips for early-omission blocks and small total advice necessarily makes a positive fraction of errors, even with local feedback. |
+| [Local patches for computation histories](mixed-tableau-patches.md) | Individual SAT calls bound the cost of circuit-described patches. A sufficiently economical cover of every needed accepting history is still missing. |
 | [Circuit approximation of time-bounded incompressibility](full-cube-advice.md) | Canonical finite-set selection under linear SAT would make every circuit below a constant times the Shannon size scale err on a constant fraction of inputs to a specified language. |
 | [Rectangle covers across all balanced partitions](all-cuts-plain-outputs.md) | Constructs one set of genuine short-program outputs hitting dense disjoint unions of rectangles, even when each rectangle uses a different partition. |
 | [Sampled sets with few easy words](hitting-sampled-batches.md) | Derives a sufficient rare-event criterion for linear SAT, including the case of advice describing one successful set. |
@@ -273,6 +282,11 @@ Use Lean 4.19.0 with its bundled Std library and Python 3.11 or later. The finit
 ```sh
 lean TraceCheck.lean
 lean FullCubeSelection.lean
+lean SuffixBlockExponents.lean
+lean MixedTableauPatches.lean
+lean XorPairCoverage.lean
+lean XorButterflies.lean
+lean XorPathCounts.lean
 lean BatchHitPotential.lean
 lean AffineProbeReplay.lean
 lean AdaptiveHashTables.lean
