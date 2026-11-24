@@ -8,6 +8,10 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+Ruling out **linear time** remains the first success condition. I derived a way to do it by proving a Boolean circuit **upper bound** for one auxiliary language. On $q$ bits, the language asks whether every program saving at least two bits misses a specified exponential deadline. If SAT takes linear time, every circuit with at most $c\,2^q/q$ gates gets at least $\epsilon 2^q$ answers wrong at all sufficiently large lengths, for some fixed $c,\epsilon>0$. An accurate small circuit on infinitely many lengths would contradict that implication. I have no such circuit. A hitting-set argument by Buhrman, Fortnow, Koucký and Loff precedes this approach for programs without a deadline. [Deadline, proof and attempted upper bound](full-cube-advice.md)
+
+A randomized search could also suffice. It can return a different large set on every successful run and include some easy words. I bounded the probability of getting so few easy words under the linear-SAT hypothesis. Removing all outputs detected at an earlier deadline and sampling the remaining words independently already fails at the required rate. [Sampled sets and the probability bound](hitting-sampled-batches.md) · [Unconditional bound for short descriptions](sampled-batch-descriptions.md)
+
 The usual random affine hash isolates any specified hard $m$-bit table with probability at most $2^{-m}$ per trial when at most $L$ tables have short programs and $L(L+1)\le 2^m-1$. This holds even with an oracle that returns the sole hard table when it exists. For general pairwise-independent buckets I derived the exact maximum probability at each marginal and number of hard tables. A fast randomized hardness test on a short initial list would give a different route. On some candidate, the random tapes certifying its correct answer must evade even a covering test that can fix a quarter of the log deadline in arbitrary positions. No such tester has been found. [Isolation bounds, extremizers and remaining test](dense-hard-table-sampling.md)
 
 A deterministic program can match the sampling probability, up to a constant in program length, when success follows from fixing sufficiently few random bits in each tape prefix. The decoder enumerates a family of almost-independent tapes whose prefixes use few seed bits at every deadline. Adding one parity check to any sampler preserves half the probability of every answer while forcing all narrow certificates to come from early runs. [Coding theorem, second-moment extension and parity obstruction](cube-tape-coding.md)
@@ -92,6 +96,16 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Circuit approximation of time-bounded incompressibility](full-cube-advice.md) | Canonical finite-set selection under linear SAT would make every circuit below a constant times the Shannon size scale err on a constant fraction of inputs to a specified language. |
+| [Rectangle covers across all balanced partitions](all-cuts-plain-outputs.md) | Constructs one set of genuine short-program outputs hitting dense disjoint unions of rectangles, even when each rectangle uses a different partition. |
+| [Sampled sets with few easy words](hitting-sampled-batches.md) | Derives a sufficient rare-event criterion for linear SAT, including the case of advice describing one successful set. |
+| [Short descriptions of sampled sets](sampled-batch-descriptions.md) | Gives an unconditional bound on the combined weight of all timely descriptions of poor hitting sets, accounting for repeated descriptions of the same result. |
+| [Fourier tests for sets of late outputs](fourier-batch-tests.md) | Constructs late program outputs that hit all dense address masks with sufficiently small Fourier norm, even after removing every early easy word. |
+| [Choosing a pivot in a random subspace](random-linear-masks.md) | The first one in a row can name a frequent hard word if a hidden subspace has enough conditional entropy and vanishes on all easy coordinates. |
+| [Learning easy tables with adaptive queries](adaptive-singleton-replay.md) | Gives bounds for a hidden affine relabeling, including a three-discovery example where an XOR recovers a designated hard word. |
+| [Completing large affine flats](adaptive-hash-tables.md) | A missing vertex of a sufficiently large flat has a timely short description when every other vertex has one, by polynomial closure and enumeration. |
+| [Several witness-recovery traces](multitrace-witnesses.md) | Coordinate-wise agreement across traces suffices for extraction under the stated seed bounds. Boolean correctness alone leaves the formal trace derivatives unconstrained. |
+| [Induction from sparse RAM states](sparse-state-induction.md) | A failed polynomial invariant has a sparse counterexample after the touched cells and registers are fixed. A short invariant for the missing output remains to be found. |
 | [Isolating a hard truth table](dense-hard-table-sampling.md) | Bounds the probability that any specified hard word is isolated with pairwise or three-wise independent tests. |
 | [Few fixed positions on a random tape](cube-tape-coding.md) | Gives unconditional deterministic codes from fractional or second-moment coverage, and relates narrow certificates after a parity gate to the original early output mass. |
 | [Extracting all bits of a unique witness](unique-witness-batches.md) | A linear SAT hypothesis permits batch recovery when a small correction to the linear forms on one RAM trace exists. An explicit parity RAM needs one correction per bit. |
@@ -258,6 +272,13 @@ Use Lean 4.19.0 with its bundled Std library and Python 3.11 or later. The finit
 
 ```sh
 lean TraceCheck.lean
+lean FullCubeSelection.lean
+lean BatchHitPotential.lean
+lean AffineProbeReplay.lean
+lean AdaptiveHashTables.lean
+lean MultitraceWitnesses.lean
+lean PivotRowMass.lean
+lean SparseStateInduction.lean
 lean Adaptive.lean
 lean CutPacking.lean
 lean SwapCount.lean
@@ -380,6 +401,8 @@ python3 rational_clock_experiment.py
 python3 adaptive_profile_experiment.py
 python3 near_clock_code_experiment.py
 python3 discounted_mass_experiment.py
+python3 batch_hit_experiment.py
+python3 partial_rank_experiment.py
 python3 dilated_mass_experiment.py
 python3 singleton_extremum_experiment.py
 python3 cube_tape_experiment.py
