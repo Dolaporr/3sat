@@ -8,6 +8,8 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+One bit about the fraction of exceptional lengths would suffice for a lower bound. If a uniform SAT formula can certify this bit on infinitely many blocks, within the specified size, linear-time SAT is impossible. The verifier can even make mistakes at a quantified rate. I found explicit windows in which at least half the blocks have the desired bit. Turning that group argument into a short proof for even one block in infinitely many windows remains open. [One-bit criterion, failed predictors and individual proof lengths](exceptional-fraction-bit.md)
+
 For the linear target, I changed the search from finding an individual missing output to certifying a count across input lengths. Among lengths from 2ʲ through 2ʲ⁺¹−1, the fraction with an early missing output tends to one as j grows. The last block whose exceptional fraction exceeds 2⁻ᵏ is bounded above and below by busy beaver values with arguments k+O(1) and k−O(1). A sufficiently small SAT certificate for one favorable block at each of unboundedly many precisions would exclude linear-time SAT. Constructing those certificates remains open. [Counting across lengths](prefix-lengths.md)
 
 For the cubic target, I found a criterion that tolerates false proofs. Let v be the first n-bit word omitted by a bounded universal machine, and W(z) the number of proofs accepted by a short verifier for word z. If a cubic SAT solver exists, every consecutive interval of K words immediately below v on which each word has more proofs than v must satisfy K+1 ≤ C(W(v)+1), for a fixed verifier-dependent constant C. A second test checks all program–output candidates jointly by matching. It tolerates ambiguous rows and matchings that change with the public challenge. The missing ingredient is a verifier that violates either bound on the actual outputs. [Witness-count criterion](multiplicity-dips.md) · [Matching and Hall certificates](matching-holes.md)
@@ -54,6 +56,11 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [One bit about exceptional lengths](exceptional-fraction-bit.md) | On every fast infinite list both values of the bit have upper relative density one. A simple predictor achieves logarithmic accuracy one. The two notions of accuracy give different SAT criteria. |
+| [Limits of fast producer covers](delayed-prefix-covers.md) | A self-referential program prevents a sound finder from excluding any entries of one fixed prefix at all large lengths, even when none of the programs there halts. |
+| [Late outputs across many lengths](time-by-length.md) | Linear SAT forces almost all words in many complete prefix blocks to acquire their first short producer during a final interval of the native clock. |
+| [The distribution of first production times](clock-release.md) | A timely sampler forces new outputs in each targeted time interval and output class under linear SAT. |
+| [Approximate counts near the native cutoff](near-native-counting.md) | Linear SAT would give quasilinear projected approximate counts. They bound how often a joint model can have an anomaly at the actual missing output, even after conditioning on a rare event. |
 | [Prefix-free programs across input lengths](prefix-lengths.md) | A global Kraft bound gives dense blocks of favorable lengths. Their convergence has no computable modulus. A checkable upper bound on the exceptions in one block would suffice under an explicit clock. |
 | [Coordinate tests on one omitted word](coordinate-omissions.md) | An adaptive exposure inequality bounds the number of local witness-count dips, accounting for advice and dependence on other coordinates. |
 | [Computations stored in fewer physical cells](address-folding.md) | Faithful replay can be checked one virtual address at a time under linear SAT. Five binary operations per address can already force a separate physical cell for every address. |
@@ -211,6 +218,11 @@ lean PrefixLengthMass.lean
 lean CoordinateOmissions.lean
 lean AddressFolding.lean
 lean SharedAnswerMass.lean
+lean ClockRelease.lean
+lean DelayedPrefixCover.lean
+lean ExceptionalBands.lean
+lean TimeByLength.lean
+python3 near_native_counting_experiment.py
 python3 coordinate_omissions_experiment.py
 python3 shared_answer_coverage_experiment.py
 python3 hole_exchange_experiment.py
