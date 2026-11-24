@@ -1,8 +1,14 @@
 # How fast can a deterministic RAM decide SAT?
 
-**Research status, 2026-11-24.** The target is to exclude a worst-case bound of O(n²), or more strongly O(n³), for a uniform deterministic RAM deciding ordinary explicit SAT. Here n counts bits in the input. The machine may keep everything it computes. Even excluding O(n) time in this model remains open.
+**Research goal, 2026-11-24.** A proof that ordinary explicit SAT has no uniform deterministic **O(n)** worst-case algorithm on a standard logarithmic-word RAM with unrestricted workspace is sufficient to complete this project. Here n counts bits in the encoded formula. Exclusions of **O(n²)** and **O(n³)** remain successively stronger goals. All three targets are open in this journal. To meet the linear target, the proof must show that for every correct deterministic solver the ratio of worst-case time to encoded input length is unbounded.
 
-We use binary-encoded literal indices, a conventional explicit formula encoding, words of Θ(log n) bits with a constant sufficient for the polynomial address range in use, and a fixed instruction set with ordinary word arithmetic, Boolean operations, and indirect reads and writes. Word operations have polylogarithmic-size Boolean implementations. Exact timing statements about promise families identify their encoding. A hard family of explicit width-three instances in this encoding would suffice for the general SAT target. At the endpoints a bound of Ω(n³) alone would still allow O(n³).
+We use binary-encoded literal indices, a conventional explicit formula encoding, words of Θ(log n) bits with a constant sufficient for the polynomial address range in use, and a fixed instruction set with ordinary word arithmetic, Boolean operations, and indirect reads and writes. Word operations have polylogarithmic-size Boolean implementations. Exact timing statements about promise families identify their encoding. A hard family of explicit width-three instances in this encoding would suffice for the general SAT target. Each target excludes the stated big-O bound. A matching big-Omega bound alone is compatible with it.
+
+For the linear target, I tested what an O(n) SAT solver would imply for checking long computation histories. It would decide an O(N)-space nondeterministic tape computation on N input bits in deterministic time 2^{O(√(N log N))}. It would also let a verifier check many partial tape transitions in time quasilinear in their combined description length. A lower bound for unrestricted SAT still requires showing that a computation with a known time lower bound admits sufficiently short checks. [Quantifier elimination and checkpoint lengths](linear-quantifiers.md) · [Checking adaptive queries together](linear-sat-batches.md) · [Partial transitions and the equality test](epoch-dictionaries.md)
+
+The permanent graph proof from PR 249 still applies if a verifier searches over finite binary witnesses. At a generic complex input one can make every test in a countable family agree on a graph point and an off-graph point. For an integer grid we quantify the input precision needed as the number of tests grows. This yields no superlinear bound in the encoded bit length. [Boolean witnesses on the permanent graph](pr249-witnesses.md) · [Original PR](https://github.com/1337isnot1337/solved-conjectures/pull/249)
+
+For a unary hierarchy computation, infinitely many accepted lengths force many distinct transitions between tape blocks. A cubic SAT algorithm would nevertheless suffice to check large groups of partial transition descriptions, if those descriptions covered an accepting run and worked for every block they admitted. A second test characterizes exactly how the gap of a verifier for a graph of Boolean implications depends on the shortest path between conflicting pins. [Tape-block transitions](epoch-dictionaries.md) · [Sampling gate values](probe-allocation.md) · [Checking joint gate distributions](local-bag-consistency.md)
 
 For the first missing output of the diagonal machine, a single certificate can cover many preceding words. Almost-complete coverage on one interval ending at that output would suffice, even if its length is unknown. A concrete version asks for short circuits that answer a probabilistic proof verifier's queries on those predecessors. I also tested a competing-prover game built directly from the gates of the diagonal computation. Its independent questions are cheap, but its decision gap can be exponentially small in circuit depth. [Batch coverage at every scale](predecessor-batches.md) · [Proof circuits and competing witnesses](referee-certificates.md)
 
@@ -34,6 +40,12 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Adaptive batches under linear SAT](linear-sat-batches.md) | Checking the answer transcript lets a deterministic decoder pay for one controller replay and one oracle test. A resulting bound on the actual producers still leaves a missing compression step. |
+| [Growing-depth checkpoint checks under linear SAT](linear-quantifiers.md) | Quasilinear elimination at each block gives a quantitative time simulation for short configurations. It still pays for the configuration bits of the computation being checked. |
+| [Discrete witness families on the permanent graph](pr249-witnesses.md) | The finite-grid calculation handles proofs chosen separately on each input, including randomized checks. It still requires many bits per matrix entry. |
+| [Short descriptions of block transitions](epoch-dictionaries.md) | A concrete sufficient condition on a unary hierarchy language uses partial records that work for every compatible input. Their existence remains open. |
+| [Probing a graph of implications](probe-allocation.md) · [Overlapping gate distributions](local-bag-consistency.md) | Optimal probing of an implication graph has an exact shortest-path formula. Joint distributions strengthen the check on a reconvergent circuit, with a gap that can still shrink with its length. |
+| [Choosing an order to fill missing outputs](adaptive-unranking.md) | One order captures every position reachable by interval producers. Repeated sweeps cover all positions reachable with arbitrary fixed lists and impose a quantitative limit on certification near the first omission. |
 | [Joint certificates before the first missing output](predecessor-batches.md) | A sharp interval bound allows false positives and unknown interval lengths. Under cubic SAT every trailing interval retains a fixed fraction of predecessors outside a sound batch verifier's coverage, up to an endpoint term. |
 | [Competing witnesses and probabilistic proof circuits](referee-certificates.md) | A perfect refutation reduces to three bounded quantifiers. A sampled check handles bounded likelihood ratios. A local gate game achieves independent questions for the actual computation but misses the required quantitative gap. |
 | [Repairing approximate phase products](phase-products.md) · [Pairing dense errors](paired-phase-products.md) | A batched SAT test can verify the locations of defects in a guessed tree of block products. A second verifier can cancel dense inverse pairs, including schedules whose midpoint is PSPACE-hard. |
@@ -88,7 +100,9 @@ The first search found a family of width-three formulas with k independent input
 
 ## Literature checks
 
-Fortnow, Lipton, van Melkebeek and Viglas obtain polynomial time exclusions with simultaneous space bounds. Williams's alternation-trading work also charges space. Mudigonda and Williams state the subpolynomial-space SAT bound for exponents strictly below 2 cos(π/7), approximately 1.802. Even that exponent lies below two. [Fortnow et al.](https://doi.org/10.1145/1101821.1101822) · [Williams](https://people.csail.mit.edu/rrw/automated-lbs.pdf) · [Mudigonda and Williams](https://arxiv.org/abs/2012.00330)
+For the linear-time target, the deterministic random-access results of Fortnow, Lipton, van Melkebeek and Viglas impose a simultaneous space bound. A pure time bound by van Melkebeek and Raz applies to a machine with one geometrically organized work tape. [Fortnow et al., full text](https://lance.fortnow.com/papers/files/tst.pdf) · [Van Melkebeek and Raz](https://www.sciencedirect.com/science/article/pii/S0304397505005402)
+
+Williams's alternation-trading work also charges space. Mudigonda and Williams state the subpolynomial-space SAT bound for exponents strictly below 2 cos(π/7), approximately 1.802. Even that exponent lies below two. [Williams](https://people.csail.mit.edu/rrw/automated-lbs.pdf) · [Mudigonda and Williams](https://arxiv.org/abs/2012.00330)
 
 Williams's square-root-space simulation concerns multitape Turing machines. The 2026 two-fifths-power preprint concerns a machine with one writable tape. Both give space upper bounds for simulation. Our trace-checking approach requires an actual time saving on a specified language in the appropriate machine model. [Williams, STOC 2025](https://arxiv.org/abs/2502.17779) · [One-tape simulation, 2026 preprint](https://github.com/openai/math/tree/main/preprints/Simulating-One-Tape-Time-in-Two-Fifths-Power-Space-September-25-2026)
 
@@ -138,6 +152,12 @@ lean TallySpan.lean
 lean GapMaximal.lean
 lean PhaseProducts.lean
 lean RefereeSupport.lean
+lean WitnessCoupling.lean
+lean LinearElimination.lean
+lean ProbeAllocation.lean
+lean LocalBagConsistency.lean
+lean RankAllocation.lean
+lean EpochDictionary.lean
 python3 history_experiment.py
 python3 phase_experiment.py
 python3 filling_experiment.py
@@ -147,6 +167,8 @@ python3 coded_diagonal_experiment.py
 python3 tail_advice_experiment.py
 python3 advised_claims_experiment.py
 python3 referee_experiment.py
+python3 probe_allocation_experiment.py
+python3 unranking_experiment.py
 python3 even_jets_experiment.py
 python3 transcript_experiment.py
 python3 local_experiment.py
