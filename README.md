@@ -1,8 +1,16 @@
 # How fast can a deterministic RAM decide SAT?
 
-**Research goal, 2026-11-24.** A proof that ordinary explicit SAT has no uniform deterministic **O(n)** worst-case algorithm on a standard logarithmic-word RAM with unrestricted workspace is sufficient to complete this project. Here n counts bits in the encoded formula. Exclusions of **O(n²)** and **O(n³)** remain successively stronger goals. All three targets are open in this journal. To meet the linear target, the proof must show that for every correct deterministic solver the ratio of worst-case time to encoded input length is unbounded.
+## Research goal
+
+A proof that ordinary explicit SAT has no uniform deterministic **O(n)** worst-case algorithm on a standard logarithmic-word RAM with unrestricted workspace is sufficient to complete this project. Here n counts bits in the encoded formula. Exclusions of **O(n²)** and **O(n³)** remain successively stronger goals. All three targets are open in this journal. To meet the linear target, the proof must show that for every correct deterministic solver the ratio of worst-case time to encoded input length is unbounded. Equivalently, for every correct solver, every constant C and every length threshold N, some formula of encoded length n≥N requires more than Cn steps. A bound such as Ω(n log log n) would meet the linear goal. An unbounded ratio along a subsequence also suffices.
 
 We use binary-encoded literal indices, a conventional explicit formula encoding, words of Θ(log n) bits with a constant sufficient for the polynomial address range in use, and a fixed instruction set with ordinary word arithmetic, Boolean operations, and indirect reads and writes. Word operations have polylogarithmic-size Boolean implementations. Exact timing statements about promise families identify their encoding. A hard family of explicit width-three instances in this encoding would suffice for the general SAT target. Each target excludes the stated big-O bound. A matching big-Omega bound alone is compatible with it.
+
+## Current results
+
+One approach asks whether a few public questions about a claimed memory history can rule out a false computation. On a fixed 12-cell example, three adaptively chosen field evaluations rule out every false pair of logs, while each of the 23,426 fixed triples lets a false pair pass. Achieving a suitable separation at infinitely many lengths for the actual first missing output of a bounded universal machine would exclude linear-time SAT. [Argument and experiment](public-memory-fingerprints.md)
+
+A linear-time SAT solver would make it cheap to ask two questions about a proposed stream of computation records. Does it allow any locally realizable run, and does it allow any run with a wrong memory value? A short description for which the answers are yes and no would certify acceptance. Finding such descriptions for a particular unary language with a known time lower bound could exclude linear SAT. For a stream that simply carries independent bits between fixed locations, the largest number of legal streams that one sound filter can accept is exactly a power of two given by interval scheduling. [Hierarchy criterion](streaming-transport.md) · [Exact filter capacity](filter-capacity.md)
 
 One test of the linear-time hypothesis now reaches the graph of block visits in an actual unary hierarchy computation. Under that hypothesis, at infinitely many accepted lengths every accepting run of the chosen verifier must have nearly linear treewidth in its number of epochs. Two writable tapes can already realize graphs of linear treewidth with three reversals on one head and two on the other. The open step is finding an accepting run whose words across the cuts have shorter descriptions, or a verifier whose graph has smaller cuts. [Tape partitions and the two-tape construction](tape-partitions.md)
 
@@ -42,12 +50,19 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Running the missing-word decoder natively](native-missing-word.md) | A different bounded interpreter eliminates two tape simulation costs. Fast polynomial evaluation lets a fixed number of adaptive rounds test B/polylog(B) points at the first word omitted within B steps. |
+| [Public fingerprints at the first missing output](public-memory-fingerprints.md) | Under linear SAT, every sufficiently short public tuple eventually lets some false log pair pass at the actual first omitted word. To exclude linear time, one separating tuple there at infinitely many lengths would suffice. |
+| [Sound one-pass filters](streaming-transport.md) · [Capacity on repeated records](filter-capacity.md) | A filter can admit many distinct accepting streams. For repeated independent bits in a fixed order, interval packing gives its exact maximum coverage. Finding a short sound filter for a hierarchy verifier remains open. |
+| [Information crossing the proof tape](crossing-bits.md) | On a family of RAM logs, certifying every consistent raw input costs quadratic weighted head movement, even with data-dependent ordering. A verifier that chooses which runs to admit has more freedom. |
+| [Completing the bounded decoder](semantic-completion.md) | Processing names online gives a total injection missing just the original first gap. Every predecessor keeps its earliest original producer. |
+| [Factoring local lookup functions](factored-lookups.md) | A fixed diagonal's local lookups admit efficient field evaluation. The published recursive schedule still calls them exponentially many times. |
 | [Partitioning the tape visits](tape-partitions.md) | A universally selected part of an accepting run can be checked with the descriptions of the words on its ancestral cuts. Two writable tapes already realize expander minors. |
 | [Checking changed cells](checkpoint-pullbacks.md) | Following a cell to its source can determine the truth of a proposed update even over an unknown starting memory. No qualifying shared description has been obtained for enough actual diagonal outputs. |
 | [Simultaneous time and space](simultaneous-space.md) | A specific language has separate fast and small-space algorithms. A combined bound or a sufficiently short one-tape head movement on a hierarchy source would exclude linear SAT. |
 | [Tuning the first missing output](tuned-first-hole.md) | A fixed universal decoder can make an arbitrarily high constant fraction of preceding addresses easy. Allowing this fraction to tend to one incurs a matching cost in the decoder header for this construction. |
 | [Adaptive batches under linear SAT](linear-sat-batches.md) | Checking the answer transcript lets a deterministic decoder pay for one controller replay and one oracle test. A resulting bound on the actual producers still leaves a missing compression step. |
 | [Growing-depth checkpoint checks under linear SAT](linear-quantifiers.md) | Quasilinear elimination at each block gives a quantitative time simulation for short configurations. It still pays for the configuration bits of the computation being checked. |
+| [Adaptive bit probes on a finite permanent grid](pr249-bit-probes.md) · [Signed integer construction](pr249-integer-pivot.md) | A finite-grid extension of PR #249 allows partial access to digits of every matrix entry, or full access to the candidate value with a hidden rational entry. Both cases still restrict matrix probes and algebraic degree. |
 | [Discrete witness families on the permanent graph](pr249-witnesses.md) | The finite-grid calculation handles proofs chosen separately on each input, including randomized checks. It still requires many bits per matrix entry. |
 | [Short descriptions of block transitions](epoch-dictionaries.md) | A concrete sufficient condition on a unary hierarchy language uses partial records that work for every compatible input. Their existence remains open. |
 | [Probing a graph of implications](probe-allocation.md) · [Overlapping gate distributions](local-bag-consistency.md) | Optimal probing of an implication graph has an exact shortest-path formula. Joint distributions strengthen the check on a reconvergent circuit, with a gap that can still shrink with its length. |
@@ -116,7 +131,7 @@ The individual notes distinguish literature precedents, elementary deductions, f
 
 ## Reproducing the checks
 
-Use Lean 4.19.0 with its bundled Std library and Python 3.11 or later. Run from the repository root.
+Use Lean 4.19.0 with its bundled Std library and Python 3.11 or later. The finite permanent-grid experiment uses SymPy. Run from the repository root.
 
 ```sh
 lean TraceCheck.lean
@@ -169,6 +184,15 @@ lean StackVisit.lean
 lean PullbackEvaluation.lean
 lean TapeTravel.lean
 lean TunedFirstHole.lean
+lean CrossingLoad.lean
+lean FactoredLookup.lean
+lean FilterRectangle.lean
+lean SemanticCompletion.lean
+lean StreamFilter.lean
+lean MomentTest.lean
+python3 filter_capacity_experiment.py
+python3 finite_grid_experiment.py
+python3 public_fingerprint_experiment.py
 python3 history_experiment.py
 python3 phase_experiment.py
 python3 filling_experiment.py
