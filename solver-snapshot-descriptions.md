@@ -68,3 +68,41 @@ All machines used by these two reductions are fixed. The known length of this br
 ## Relation to earlier work
 
 Fortnow, Lipton, van Melkebeek and Viglas and Williams check lists of configurations to trade deterministic time and space for alternations. Earlier entries in this journal studied recovery of auxiliary computations. Here the object decoded is the actual solver memory, descriptions may share data across time, and the decoder receives the formula for free while paying for each word lookup. I found the full-configuration checkpoint argument in the cited work. Priority for this specific actual-run bound and its powers of the logarithm remains unverified. The Lean file checks local replay, authenticity using only internal memories, the logical bounded-diagonal step from its stated premises and the two logarithmic cost exponents. The RAM-to-CNF construction and its clock analysis are manuscript proofs. [FLMV](https://lance.fortnow.com/papers/files/tst.pdf) · [Williams](https://people.csail.mit.edu/rrw/sat-journal-final.pdf) · [Earlier history questions in the journal](native-first-reads.md)
+
+## A coarser grid for shared and independent descriptions
+
+**Research journal, 24 November 2026.** Fix the solver, its valid padded time clock and the decoders as above. There is a sufficiently large fixed integer $K$ such that on the equal-interval grid
+$$
+       P=\lceil K L^{2a+d+6}\rceil
+$$
+one unsatisfiable formula at each sufficiently large source padding length has both properties below.
+
+* One pool decoding all internal memories requires $\Omega(N/L^{a+4})$ bits.
+* The sum of the minimum lengths of independently chosen descriptions of the internal memories is $\Omega(N/L^{a+3})$ bits. In particular one needs $\Omega(N/L^{3a+d+9})$ bits on its own.
+
+Here independent means that each row can be chosen separately, with its fixed decoder receiving that row and its original time or grid index. Both decoders have word-query time $O(L^d)$. For linear time and constant-time lookup these are $K L^6$ intervals, total bounds $\Omega(N/L^4)$ and $\Omega(N/L^3)$ respectively, and an individual bound $\Omega(N/L^9)$. The large constant matters in this grid statement.
+
+Write $H=\Theta(n_0^2)$ for the interpreter deadline, $N=\Theta(HL^3)$, and $T=O(HL^{a+3})$ for the padded solver clock. Use a **fixed** recognizer that guesses a grid size or a schedule, and may use either the shared-pool defect check or the independent-row defect check. In each mode no successful branch on any schedule can certify a false rejection. The independent-row evaluator used below is fixed in advance too. The program does not contain $K$ or the small payload constants. Its own bounded-interpreter formulas and its interpretation constant are thus fixed before choosing any of them. At the intended grid its maximum gap is
+$$
+       G\le \lceil T/P\rceil=O(H/(K L^{a+d+3})+1)
+$$
+with absolute-in-$K$ implied constant. The bounded-computation templates and defect simulators admit all these schedules with the same program constants. In the shared-pool branch the materialized defect check costs $O(H/K+sL^{a+1})+o(H)$ for an honest $s$-bit pool, by the accounting above. Choose $K$ large after fixing the interpreter constant and then the constant on $s\le\epsilon H/L^{a+1}$ small. This would put the recognizer's signal within the deadline. The self-input diagonal therefore excludes such a pool. [Materialized public-input cost](materialized-input-census.md)
+
+For independent rows use the bulk selector. With $S'$ total supplied bits, $u'$ their maximum row length, and fixed $O(L^d)$ decoder time, its branch time on this grid is
+$$
+ O\big(H/K+(S'+u'L+P L)L^a\big)+o(H).
+$$
+This bound includes guessing the descriptions and constructing the decision instance. The $u'L$ term prevents simply substituting an assumed small sum into the formula. Deleting heavy rows can also create long replay gaps on this coarser grid. [Bulk selection, formula (1)](bulk-snapshot-selection.md)
+
+Suppose the independent minimum lengths sum to $S\le\eta H/L^a$. Call a row heavy when its length exceeds $v=\sqrt\eta\,H/L^{a+1}$. There are at most $r=\sqrt\eta L$ heavy rows. Keep light descriptions unchanged except for a mode header. For each heavy time, copy the nearest preceding light description and its actual original time or index, or use the initial zero array if there is none. Add a dictionary giving the final value of every address written since that base time. The distance is at most $rG$. Zero overwrites are explicit entries. A fixed evaluator first tests membership and otherwise invokes the original decoder at the base time and original row length. This reconstructs the actual memory for every queried address, independently of how often the solver changed it.
+
+For precision, a static dictionary of $t$ such address/value pairs uses $O((t+1)L)$ bits and constant lookup time with unrestricted preprocessing. Hash the $w$-bit keys to a power-of-two number of bins of order $t$ by the high bits of a random odd word times the key modulo $2^w$. Collision probability is at most twice the inverse bin count: the modular difference is uniform among residues of its fixed two-adic valuation and must lie within one bin-width of zero in either direction. Some choice has $\sum_j t_j^2=O(t)$, where $t_j$ are the occupancies. In each nonempty bin hash again into a power-of-two table of at least $4t_j^2$ slots; the expected number of colliding pairs is less than one. If a requested hash table would exceed the key universe, index that table directly by the key within the same space allowance. Store the two-level parameters, keys, occupied flags and values, and compare the queried key. Empty and singleton bins have direct encodings. Fixed word-width headroom accommodates the tables and their offsets. Decode length fields and switch modes in constant time. An honest branch guesses this representation; it need not build the dictionaries. Malformed representations are totalized using the existing clock and range conventions.
+
+There are $O(rG)$ patched addresses per heavy row. This gives
+$$
+ \begin{aligned}
+ S'&=O(S+r v+r^2G L+P L)=O(\eta H/L^a)+\operatorname{poly}(L),\\
+ u'&=O(v+rG L+L)=O(\sqrt\eta\,H/L^{a+1})+\operatorname{poly}(L).
+ \end{aligned}
+$$
+Indeed $r^2G L=O(\eta H/(K L^{a+d}))+\operatorname{poly}(L)$ and $rG L=O(\sqrt\eta\,H/(K L^{a+d+1}))+\operatorname{poly}(L)$. The replacement rows meet the same query exponent. Choose $K$ for the worst constant in the two checks. Choosing $\eta$ sufficiently small now makes the independent branch finish within the interpreter deadline as well. This contradiction proves the sum bound, and division by the number of internal times proves the single-row bound. The statements concern the specified actual rejecting traces and leave unrestricted SAT time open.

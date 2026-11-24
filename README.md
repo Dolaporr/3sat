@@ -6,7 +6,15 @@ The first target is to rule out a uniform deterministic **O(n)** worst-case algo
 
 We use binary-encoded literal indices, a conventional explicit formula encoding, words of Θ(log n) bits with a constant sufficient for the polynomial address range in use, and a fixed instruction set with ordinary word arithmetic, Boolean operations, and indirect reads and writes. Word operations have polylogarithmic-size Boolean implementations. Exact timing statements about promise families identify their encoding. A hard family of explicit width-three instances in this encoding would suffice for the general SAT target. Each target excludes the stated big-O bound. A matching big-Omega bound alone is compatible with it.
 
+## What does algebraic hardness force on the physical bits of SAT?
+
+On a dense fixed-stride 3-CNF encoding, **any** set of $h^\epsilon$ input bits at the specified $h$-bit lengths contains a face testing a polynomial-size directed cycle matrix. These can all be bits in variable names. Using the reported formal Hamiltonian cycle lower bound, a polynomial-size arithmetic representative of SAT on the Boolean cube cannot remain multilinear on that many positions after every Boolean pinning of the others. A scan-time unit-propagation language has the same restriction property. The result leaves the unrestricted SAT time objective open. [Construction, bounds and test on actual records](arbitrary-sat-coordinate-faces.md)
+
+For the complex permanent graph, permitting numerical queries to an arbitrary degree-two extension of a fixed SAT table preserves the graph lower bound from PR 249. The unique multilinear SAT extension is different: a single numerical query recovers the permanent. A sparse perturbation version quantifies the number of redundant calls needed. [Oracle theorem and circuit simulation](quadratic-oracle-exclusion.md) · [Consequences for the Boolean permanent itself](matching-coordinates-permanent.md)
+
 ## How much can a fast solver compress its own states?
+
+At linear time with constant-time word lookup, some unsatisfiable inputs force $\Omega(N/\log^3 N)$ bits across independent descriptions of the solver's actual memory on one prescribed grid of $K\log^6 N$ intervals. One checkpoint needs $\Omega(N/\log^9 N)$ bits. [Fixed-grid proof](solver-snapshot-descriptions.md) · [A discovery cut with exponentially many easily decoded states](selected-input-rereads.md) · [What can be inferred from the remaining accepted inputs at a switch](conditional-switch-residuals.md)
 
 For every fixed time exponent below $2\cos(\pi/7)$, a deterministic SAT solver meeting that clock must reach states for which a fixed decoder cannot simultaneously use a subpolynomial-length description and subpolynomial time per word. The decoder receives the physical input and the instruction time. A nested checkpoint test needs correctness only from a genuine predecessor. This permits consecutive speedups in the published alternation-trading proof. No bound on the solver's physical workspace is assumed. [Statement, quantifiers and hierarchy argument](true-start-snapshot-trading.md)
 
