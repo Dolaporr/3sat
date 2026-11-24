@@ -8,6 +8,8 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+For the cubic target, I found a criterion that tolerates false proofs. Let v be the first n-bit word omitted by a bounded universal machine, and W(z) the number of proofs accepted by a short verifier for word z. If a cubic SAT solver exists, every consecutive interval of K words immediately below v on which each word has more proofs than v must satisfy K+1 ≤ C(W(v)+1), for a fixed verifier-dependent constant C. A second test checks all program–output candidates jointly by matching. It tolerates ambiguous rows and matchings that change with the public challenge. The missing ingredient is a verifier that violates either bound on the actual outputs. [Witness-count criterion](multiplicity-dips.md) · [Matching and Hall certificates](matching-holes.md)
+
 One approach asks whether a few public questions about a claimed memory history can rule out a false computation. On a fixed 12-cell example, three adaptively chosen field evaluations rule out every false pair of logs, while each of the 23,426 fixed triples lets a false pair pass. Achieving a suitable separation at infinitely many lengths for the actual first missing output of a bounded universal machine would exclude linear-time SAT. [Argument and experiment](public-memory-fingerprints.md)
 
 A linear-time SAT solver would make it cheap to ask two questions about a proposed stream of computation records. Does it allow any locally realizable run, and does it allow any run with a wrong memory value? A short description for which the answers are yes and no would certify acceptance. Finding such descriptions for a particular unary language with a known time lower bound could exclude linear SAT. For a stream that simply carries independent bits between fixed locations, the largest number of legal streams that one sound filter can accept is exactly a power of two given by interval scheduling. [Hierarchy criterion](streaming-transport.md) · [Exact filter capacity](filter-capacity.md)
@@ -50,6 +52,10 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Multiplicity of proofs near the first missing word](multiplicity-dips.md) | A one-witness advantage throughout a sufficiently long interval would exclude cubic SAT, even with false proofs at its endpoint. The integer-array packing bound has an exact finite maximum. |
+| [Matching program names to candidate words](matching-holes.md) | The actual omitted word must remain among many possible matching holes even after intersecting over public challenges, assuming cubic SAT. Sparse candidate lists alone can leave all holes possible. |
+| [The first incorrect read](first-fault-cache.md) · [Recovering the incoming words](native-first-reads.md) | Linear SAT would force many potential first faults on one genuine trajectory and expensive incoming-word predictions on every genuine producer of many predecessors. |
+| [Incorrect returns of stack symbols](stack-packet-faults.md) · [Isolating an owner's possible words](local-word-isolation.md) | On rejecting hierarchy inputs, one false chronology can contain a large nested set of erroneous pops. On accepting inputs, the cost of identifying only one endpoint's words gives a separate criterion. |
 | [Running the missing-word decoder natively](native-missing-word.md) | A different bounded interpreter eliminates two tape simulation costs. Fast polynomial evaluation lets a fixed number of adaptive rounds test B/polylog(B) points at the first word omitted within B steps. |
 | [Public fingerprints at the first missing output](public-memory-fingerprints.md) | Under linear SAT, every sufficiently short public tuple eventually lets some false log pair pass at the actual first omitted word. To exclude linear time, one separating tuple there at infinitely many lengths would suffice. |
 | [Sound one-pass filters](streaming-transport.md) · [Capacity on repeated records](filter-capacity.md) | A filter can admit many distinct accepting streams. For repeated independent bits in a fixed order, interval packing gives its exact maximum coverage. Finding a short sound filter for a hierarchy verifier remains open. |
@@ -131,7 +137,7 @@ The individual notes distinguish literature precedents, elementary deductions, f
 
 ## Reproducing the checks
 
-Use Lean 4.19.0 with its bundled Std library and Python 3.11 or later. The finite permanent-grid experiment uses SymPy. Run from the repository root.
+Use Lean 4.19.0 with its bundled Std library and Python 3.11 or later. The finite permanent-grid and matching experiments use SymPy. Run from the repository root.
 
 ```sh
 lean TraceCheck.lean
@@ -190,6 +196,14 @@ lean FilterRectangle.lean
 lean SemanticCompletion.lean
 lean StreamFilter.lean
 lean MomentTest.lean
+lean FirstFaultCache.lean
+lean FirstReadReplay.lean
+lean HoleExchange.lean
+lean MultiplicityDips.lean
+lean StackPacket.lean
+python3 hole_exchange_experiment.py
+python3 multiplicity_dips_experiment.py
+python3 native_first_reads_experiment.py
 python3 filter_capacity_experiment.py
 python3 finite_grid_experiment.py
 python3 public_fingerprint_experiment.py
