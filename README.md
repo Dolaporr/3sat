@@ -6,6 +6,12 @@ The first target is to rule out a uniform deterministic **O(n)** worst-case algo
 
 We use binary-encoded literal indices, a conventional explicit formula encoding, words of Θ(log n) bits with a constant sufficient for the polynomial address range in use, and a fixed instruction set with ordinary word arithmetic, Boolean operations, and indirect reads and writes. Word operations have polylogarithmic-size Boolean implementations. Exact timing statements about promise families identify their encoding. A hard family of explicit width-three instances in this encoding would suffice for the general SAT target. Each target excludes the stated big-O bound. A matching big-Omega bound alone is compatible with it.
 
+## What must a solver retrieve after it has read half the data?
+
+On an explicitly generated family of $n$-bit 3-CNFs, stop each actual deterministic solver when it first sees half the designated data bits, in its own read order. At every large scale some input forces it either to reread $\Omega(n/\log n)$ distinct earlier data bits or to retrieve $\Omega(n/\log^2 n)$ distinct **nonzero** work words written before the cut. The solver has unlimited workspace. The proof treats arbitrarily many reads of initial zeros for free. A globally correct solver matches the work-word count on the family by packing the bits and finishes in $O(n/\log n)$ steps. Counting all incoming work addresses also gives a version on almost every input of each verdict. [Proof for the actual read order](half-read-reuse.md) · [Uniform expander construction](expander-cut-signs.md) · [Sparse graph bounds](sparse-quadratic-sat-cuts.md) · [Finite sign argument in Lean](PositiveQueryLeaves.lean)
+
+A random polynomial on the data gives a separate test across every balanced input split. The prefix and suffix may each probe the opposite side and may check an arbitrarily long independently decoded snapshot for equality. A three-bank construction permits private unordered fragments. An explicit pair of optimal solvers shows how all transfers of one solver can cross the same midpoint, while another solver returns the same verdicts with no writable transfers. A separate proof tests whether a small number of checks can certify the computation that selected a SAT verdict. [Two-sided input probes](spectral-sat-cuts.md) · [Adaptive memory reads and partial array checks](spectral-work-reads.md) · [Three-bank argument](three-bank-solver-phases.md) · [Unordered fragment verification](unordered-solver-fragments.md) · [Single-cut counterexample](single-cut-transfer-graphs.md) · [Sampled verdict checks](exact-sampled-verdicts.md)
+
 ## How long do opposite SAT verdicts take on the same clause layout?
 
 At every sufficiently large scale a uniform generator gives pairs of $n$-bit 3-CNFs. Exactly one member of each pair has a satisfying assignment, and that assignment is unique. Across the whole list only $O(\log\log n)$ designated literal signs vary. For every fixed correct deterministic SAT solver, **both members of all but a solver-dependent constant number of pairs take more than $n/\operatorname{polylog} n$ steps**. The index and the locations of the varying signs can be given to the solver. The proof also bounds how many pairs a sound shortcut with shared advice can answer, with a converse for the overhead of supporting many advice lengths. Under an explicit padding choice, one globally correct solver recognizes and decides every family member in $O(n/\log n)$ steps. [Proof, advice bounds and exact clock](shortcut-capital.md) · [Lean mass argument](ShortcutCapital.lean)
@@ -402,6 +408,18 @@ The individual notes distinguish literature precedents, elementary deductions, f
 Use Lean 4.19.0 with its bundled Std library and Python 3.11 or later. The finite permanent-grid and matching experiments use SymPy. The independent singleton optimization check uses NumPy and SciPy. Run from the repository root.
 
 ```sh
+lean PositiveQueryLeaves.lean
+lean CrossProbeSpectrum.lean
+lean SingleCutTransfers.lean
+lean ThreeBankPhases.lean
+lean OrdinalBlindQueries.lean
+python3 half_read_reuse_audit.py
+python3 spectral_cut_audit.py
+python3 sparse_quadratic_cut_audit.py
+python3 expander_cut_sign_audit.py
+python3 single_cut_transfer_audit.py
+python3 three_bank_phase_audit.py
+python3 ordinal_blind_query_audit.py
 lean ShortcutCapital.lean
 lean SemanticSampling.lean
 lean SemanticCutPermutations.lean
