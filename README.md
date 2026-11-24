@@ -8,6 +8,8 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+One candidate separation now concerns a single word’s successive shortest programs. At each large length m, count how often the best description of one word improves between times 2³ᵐ and 2⁴ᵐ, among words having a final description of at most 3⌈log₂(m+2)⌉ bits. On every efficient universal machine I can force at least a constant times √m improvements on some such word, unconditionally. Linear SAT would force at least a constant times m/log m at every large length. Finding one machine with a smaller count along an unbounded sequence of lengths would suffice if its ratio to m/log m tends to zero. A machine that publishes only at scheduled times attains an upper bound of order m/log m, with an arbitrarily small fixed coefficient as the machine varies. [Conditional count](successive-description-times.md) · [Unconditional square-root count](adaptive-description-times.md)
+
 A fixed additive gap now suffices for one test of the linear-time target. For each output word of length m, record how many bits its shortest program saves over m at a late deadline. Under the linear-SAT hypothesis the two-clock sum must be algorithmically random for at least one saving in every H consecutive savings, for a constant H depending on the machine. A single efficient universal machine with arbitrarily long gaps would therefore rule out O(n) time for SAT. I constructed machines with any prescribed fixed gap size, and even prescribed bounded-gap patterns indexed by enumerable processes. The construction still needs a finite bound on each machine’s gaps. [Conditional constant-gap bound](exact-saving-blocks.md) · [Which patterns a machine can realize](programmable-clock-spectrum.md)
 
 A related linear-SAT test can be stated using only shortest program lengths at two clocks. For each word, measure how much its best description improves when the deadline grows by a polynomial factor. Under linear SAT the sum of these improvements over words whose best descriptions are within ⌈log₂ log₂ m⌉ bits of their length m must be algorithmically random, with the precise weighting below. The argument also forces random sums at particular fixed description-length savings, with gaps of at most logarithmic size between them. Showing sufficiently large gaps would suffice. Removing the length restriction makes the sum random unconditionally, by an explicit family of short programs. [Clocked complexity increments](clocked-complexity-increments.md)
@@ -75,6 +77,13 @@ The first search found a family of width-three formulas with k independent input
 | [Prescribing which exact savings have random increments](programmable-clock-spectrum.md) | Two machines can agree on every program’s output and on all sufficiently late integer-rate outer complexities while disagreeing at every odd saving. A separate construction realizes any uniformly bounded-gap Π⁰₂ pattern. |
 | [Constant-width intervals of description savings](exact-saving-blocks.md) | Linear SAT would force random increments in some column in every constant-width interval. The bound holds in each fixed polynomial-ratio clock interval. A separate residual randomness result is unconditional. |
 | [Description savings relative to a moving cutoff](moving-saving-cutoffs.md) | Under linear SAT, a timely computable program-length cutoff on powers of two has a random increment sum at a fixed bounded offset. Short cutoffs allow direct enumeration unconditionally. |
+| [Using newly completed programs to pay for the next time interval](adaptive-description-times.md) | On every efficient native machine and every large length, an actual word with a short final program has Ω(√m) successive improvements. The joint prefix code adapts to observed arrival mass. |
+| [Individual clock rates on all native machines](exceptional-rate-capacity.md) | A closed set of rates of Hausdorff dimension one has only finitely many near-optimal arrivals in each specified window on every machine. Every rate law in the conditional SAT test gives it measure zero. |
+| [Avoiding a small list of rate prefixes](rate-list-lookahead.md) | Finite lookahead can avoid a bounded number of forbidden prefixes per level. The lookahead increases the time needed to compute the chosen rate. |
+| [Successive improvements on one word](successive-description-times.md) | Quantifies the gap between full enumeration and the consequence of linear SAT at the same clocks, for the same statistic on short final descriptions. |
+| [Common improvements across a Hamming ball](common-distortion-balls.md) | Under linear SAT, every word of one ball improves by at least 0.32m bits on every interpreter in a fixed finite list, also between polynomial deadlines. |
+| [Predicting the output prefix of an early program](early-prefix-prediction.md) | A machine with a large gap must supply genuine early names that evade all short predictors in a stated bounded-rank class. |
+| [Time needed to describe a rate prefix](rate-prefix-depth.md) | A low timely mass on every prefix at one scale coexists with an actual machine where all exact savings have random increments. |
 | [Rate distributions including atoms and singular measures](rate-cylinder-laws.md) | Under linear SAT the same constant-width test holds with probability one for every rate law meeting the stated approximation time, including at each atom. |
 | [Continuously varying the deadline](continuum-saving-rates.md) | Under linear SAT, almost every individual rate in [3,4] has infinitely many witnesses in every interval of a fixed sufficiently large number of savings. Integrating over rates gives a computable-series test. |
 | [Estimating early program outputs from the payload](sampled-prefix-mass.md) | One payload can estimate early prefix probabilities and still appear in the output. A fixed-point obstruction explains why a distribution-free selection rule cannot guarantee a lightly occupied group of tags. |
@@ -268,6 +277,9 @@ lean ClockSpectrum.lean
 lean ResidueHeaders.lean
 lean ContinuumSavingRates.lean
 lean RateCylinderLaws.lean
+lean SuccessiveDescriptions.lean
+lean CommonDistortion.lean
+lean PrefixPrediction.lean
 lean TailCapacity.lean
 lean StaggeredRelease.lean
 lean RateBinCredits.lean
@@ -281,6 +293,8 @@ lean ExclusiveOwner.lean
 lean ParityFibers.lean
 python3 one_bit_production_experiment.py
 python3 rational_clock_experiment.py
+python3 adaptive_profile_experiment.py
+python3 rate_list_game.py
 python3 word_completion_experiment.py
 python3 suffix_image_experiment.py
 python3 window_lists_experiment.py
