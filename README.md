@@ -70,10 +70,12 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Testing one coefficient after a signed monomial substitution](monomial-weight-coefficients.md) | An application of real point location gives polynomial-depth comparison trees for an exact signed coefficient, including all ties. A uniform Boolean-to-arithmetic conversion is still missing. |
 | [Agreement at every rational exponential deadline](rational-clock-agreement.md) | Two machines can agree on the timely status of every name at every fixed rational rate eventually, while differing on all odd savings within the last polynomial factor of each deadline in (3,4). |
 | [Prescribing which exact savings have random increments](programmable-clock-spectrum.md) | Two machines can agree on every program’s output and on all sufficiently late integer-rate outer complexities while disagreeing at every odd saving. A separate construction realizes any uniformly bounded-gap Π⁰₂ pattern. |
 | [Constant-width intervals of description savings](exact-saving-blocks.md) | Linear SAT would force random increments in some column in every constant-width interval. The bound holds in each fixed polynomial-ratio clock interval. A separate residual randomness result is unconditional. |
 | [Description savings relative to a moving cutoff](moving-saving-cutoffs.md) | Under linear SAT, a timely computable program-length cutoff on powers of two has a random increment sum at a fixed bounded offset. Short cutoffs allow direct enumeration unconditionally. |
+| [Rate distributions including atoms and singular measures](rate-cylinder-laws.md) | Under linear SAT the same constant-width test holds with probability one for every rate law meeting the stated approximation time, including at each atom. |
 | [Continuously varying the deadline](continuum-saving-rates.md) | Under linear SAT, almost every individual rate in [3,4] has infinitely many witnesses in every interval of a fixed sufficiently large number of savings. Integrating over rates gives a computable-series test. |
 | [Estimating early program outputs from the payload](sampled-prefix-mass.md) | One payload can estimate early prefix probabilities and still appear in the output. A fixed-point obstruction explains why a distribution-free selection rule cannot guarantee a lightly occupied group of tags. |
 | [A series over words at two clocks](clocked-complexity-increments.md) | Linear SAT would force randomness of the clock-increment sum even for almost incompressible words. Dropping the length band gives unconditional randomness via simple diagonal words. |
@@ -265,6 +267,7 @@ lean OneBitProduction.lean
 lean ClockSpectrum.lean
 lean ResidueHeaders.lean
 lean ContinuumSavingRates.lean
+lean RateCylinderLaws.lean
 lean TailCapacity.lean
 lean StaggeredRelease.lean
 lean RateBinCredits.lean
