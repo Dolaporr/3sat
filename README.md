@@ -8,6 +8,8 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+I narrowed the matrix question in the linear SAT test. For a sufficiently large binary square of side $J$, if at most $\lfloor0.2883J\rfloor$ rows are nonzero, one can change at most $J^2/16$ entries to reduce its rank to $\lfloor J/16\rfloor$. For $\lfloor0.2816J\rfloor$ nonzero rows I obtained a deterministic algorithm producing the factors in matrix-multiplication time up to logarithmic factors. Thus it would suffice to prove the first row-count bound infinitely often for the fixed program's actual output. Under linear SAT its matrix instead has between about $0.2883J$ and $0.29805J$ nonzero rows asymptotically. Which behavior occurs remains open. [Rectangular approximation and explicit factors](anchored-matrix-covers.md) · [Improvement using triples](triple-anchor-cover.md) · [The matrix used in the SAT test](lex-factor-responses.md) · [Reproducible checks](anchored_cover_experiment.py)
+
 The linear target has an exact test using the last output bit of one fixed program. Arrange those bits in a square of side $L=2^m$. If a linear SAT solver exists, at every sufficiently large phase its table is more than $L^2/16$ bits away from every binary matrix of rank at most $L/16$. If every linear-time candidate fails, the table is identically zero throughout intervals $j\le m<2^j$ for arbitrarily large $j$. The program checks which candidate agrees with brute-force SAT on growing sets of short formulas. Neither behavior has been proved unconditionally. On the candidate rigid table, clearing any one-entry already brings it within the allowed distance. This identifies exactly where an approximation argument can miss by one bit. [Fixed program and equivalence](fixed-program-parity.md) · [Window approximation and counterexample](substring-template-rigidity.md) · [Phase checks in Lean](TrialResetIntervals.lean)
 
 I found a way to use **parities of short programs** to test all three SAT time targets. Arrange the words of even length $q$ in a square with $L=2^{q/2}$ rows. Select short programs by a random polynomial on their names, and enter the parity of the selected names that produce each word. Under linear-time SAT, at most a $2^{-\Omega(q^2)}$ fraction of these matrices can be changed in a small constant fraction of their entries to give binary rank at most $\kappa L$. The test can ignore every word already produced by time $2^q$. Thus a low-rank construction for a fraction $2^{-o(q^2)}$ of the selections would suffice. I obtained low rank for every selection on a particular nonlinear program family; the full interpreter remains unresolved. The quadratic and cubic versions have smaller target ranks. Even a single power of the name index must give hard parity matrices for almost every scalar multiplier at some exponent in every sufficiently long run of consecutive powers. [Parity criterion and inverse calculation](parity-of-program-fibers.md) · [Finite-field experiments](fiber_selector_syndrome_experiment.py) · [Tuple count](FiberMomentTuples.lean) · [Sparse fiber moments](SparseFiberMoments.lean)
@@ -108,6 +110,13 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Approximating arbitrary rectangular matrices](anchored-matrix-covers.md) | A block algorithm fits both row and column data using the same rank budget. An existence proof uses sparse perturbations of the generators to protect an initial set of columns. |
+| [Sharing a rank dimension across three columns](triple-anchor-cover.md) | Sparse perturbations combined with a four-symbol error calculation extend the unconditional approximation guarantee through $0.2883J$ rows. |
+| [Responses to earlier lexicographic competitors](lex-factor-responses.md) | A fast procedure returning factors for all earlier competitors would remove the quadratic sequential search factor. Direct-sum column spaces fall short of covering that set. |
+| [Column subspace dimensions and actual late outputs](column-subspace-tests.md) | The ambient label space can be arbitrarily large. A small intrinsic dimension in each column would suffice if its incidence test accepted many hard words and few late outputs. |
+| [A sign change on one routed path](one-break-paths.md) | An internal sign break removes an endpoint constraint. Even with an identical pairing of the ends, one marked site can hide the parity of a whole switch sequence. |
+| [Local tests for a disjunction of candidate solvers](portfolio-local-defects.md) | Failure of all possible subcollections has a certificate using at most one elimination per candidate and one final local test. Proving that every fast menu has such a certificate is open. |
+| [Delayed verdicts on larger formulas](delayed-diagonal-relays.md) | Ruling out one pattern of joint outputs on sufficiently many program tuples could refute a proposed solver. The required predictions have not been obtained. |
 | [One program for all three SAT clocks](fixed-program-parity.md) | In each mode a fixed prefix selects a program whose last bit gives either eventually rigid tables under the SAT hypothesis or arbitrarily long intervals of zero tables if that hypothesis fails. |
 | [Checking a solver with its own verdicts](checking-a-solver-with-its-own-verdicts.md) | A positive answer to an explicit query certifies that the program is wrong. For every finite correctness horizon one wrong linear-time program passes all its own queries forever. |
 | [Rows drawn from a few common strings](substring-template-rigidity.md) | Extends a Toeplitz nonrigidity bound to repeated windows and proves restrictions on the lexicographically first rigid matrix. Some logarithmic-rank matrices defeat the window test in both orientations. |
@@ -295,6 +304,16 @@ The individual notes distinguish literature precedents, elementary deductions, f
 Use Lean 4.19.0 with its bundled Std library and Python 3.11 or later. The finite permanent-grid and matching experiments use SymPy. The independent singleton optimization check uses NumPy and SciPy. Run from the repository root.
 
 ```sh
+lean ChainProjection.lean
+lean LexFactorResponse.lean
+lean AnchoredCoverMoments.lean
+lean TwoArmFactors.lean
+lean PortfolioLocalDefects.lean
+lean RelayTuplePatterns.lean
+python3 anchored_cover_experiment.py
+python3 lex_factor_response_experiment.py
+python3 word_path_flat_experiment.py
+python3 projective_incidence_experiment.py
 lean LocalVerdictCheck.lean
 lean SolverTrialStability.lean
 lean TrialResetIntervals.lean
