@@ -8,6 +8,8 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+A possible way to rule out linear SAT is to find a word that a fixed randomized sampler prints frequently by a deadline, even though every short deterministic program is too slow. For inverse-polylogarithmic probabilities and words no longer than the logarithm of the deadline, this test is equivalent to checking a single interpreter on binary integers, giving the integer itself as the starting time allowance. The equivalence is unconditional. A randomized search can detect even one qualifying violation in a block $[N,2N)$ in $N\,\mathrm{polylog}(N)$ time for each fixed inverse-polylogarithmic probability threshold and program budget of order $\log\log N$ bits. Finding violations that persist for every fixed clock exponent is still open. [Equivalence and probability transfer](sampling-at-a-numeric-length.md) · [Search guarantees and finite test](dilated-program-mass.md)
+
 There is now a test for linear SAT using only programs that print zeros. Give a program a cost of its length plus the logarithm of its running time. For each word of n zeros, compare the best cost with the total weight of all programs printing it, where each program’s ordinary probability is divided by its running time. Linear SAT would bound the difference between the best cost and the negative logarithm of that weight by O(log log n), for every n on each fixed efficient interpreter. An ordinary interpreter can attain this order, even with any prescribed fixed coefficient as the interpreter varies. The search needs an unbounded ratio on one fixed interpreter. I also proved the upper bound unconditionally outside a quantitatively small set of lengths and constructed very deep lengths where the test still passes. [Unary test and the unsuccessful diagonal](unary-speed-gap.md) · [Ordinary examples attaining the scale](native-coding-delays.md) · [All-output bound](discounted-program-mass.md)
 
 A separate test asks whether two programs can match the best description of an ordered pair when both programs pay only once for the longer running time. Linear SAT would allow the split with logarithmic overhead in the pair’s optimal cost. I constructed pairs that incur an asymptotically sharp extra cost when the shorter running time also receives a positive charge. They leave the shared-time test open. [Splitting the description of a pair](shared-levin-clock.md)
@@ -80,6 +82,12 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Synchronizing publication times on a single numeric length](sampling-at-a-numeric-length.md) | Transfers a constant fraction of a short word’s sampling probability to an integer that encodes it. The high-probability deadline test is equivalent to a single-interpreter numeric test. |
+| [One deadline for the full discounted probability](dilated-program-mass.md) | Proves a sharp probability inequality and gives a thresholded search for exceptional lengths. Under linear SAT one program attains a constant fraction of the total mass after increasing its time allowance. |
+| [Pathwidth of a real computation](trace-pathwidth.md) | Local checks authenticate a guessed decomposition of a tape run. The width needed by the shortest timely descriptions near the first missing output remains unknown. |
+| [Nondeterministic descriptions with large checkpoints](single-valued-checkpoints.md) | Under linear SAT the number of strings forcing a large checkpoint on every successful low-cost description reaches the unconditional leading-exponent counting bound. |
+| [Searching the random-input computation tree](fair-tape-work.md) | Bounds the fraction of successful runs that can survive two deterministic searches. One shares common prefixes and one merges identical RAM configurations. |
+| [Quadratic readouts of random bits](quadratic-sampler-fibers.md) | Exact output counts give a short program when the combined output and free selector dimensions fit the deadline. |
 | [Reciprocal-time program mass](discounted-program-mass.md) | Relates the weighted mass to public-randomness Levin cost. Under linear SAT its negative logarithm approximates the deterministic best cost to logarithmic error. |
 | [Unary outputs at their own numeric deadlines](unary-speed-gap.md) | Reduces the target to one interpreter’s binary descriptions with a soft deadline and bounds the fraction of exceptional lengths unconditionally. |
 | [An ordinary interpreter with delayed generic programs](native-coding-delays.md) | Each fixed polylogarithmic slowdown can fail on a different efficient interpreter. The all-zero words also realize a nonconstant gap for reciprocal-time mass. |
@@ -305,6 +313,12 @@ lean ListedFastReplacements.lean
 lean NearClockCoding.lean
 lean SharedLevinClock.lean
 lean DiscountedMass.lean
+lean DilatedMass.lean
+lean MovingThreshold.lean
+lean MemoryLayout.lean
+lean PrefixTreeWork.lean
+lean SingleValuedCheckpoints.lean
+lean QuadraticFibers.lean
 lean DensePrefixQueries.lean
 lean RelationalMemory.lean
 lean SampleClockFeedback.lean
@@ -327,6 +341,10 @@ python3 rational_clock_experiment.py
 python3 adaptive_profile_experiment.py
 python3 near_clock_code_experiment.py
 python3 discounted_mass_experiment.py
+python3 dilated_mass_experiment.py
+python3 moving_threshold_experiment.py
+python3 trace_pathwidth_experiment.py
+python3 quadratic_fiber_experiment.py
 python3 relational_memory_experiment.py
 python3 sample_clock_feedback_experiment.py
 python3 implicit_output_experiment.py
