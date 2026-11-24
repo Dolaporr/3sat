@@ -14,6 +14,18 @@ Under near-linear SAT, a second generator produces pairs differing in one litera
 
 At the first failed index, every Hall witness names exactly the neighboring programs. Every matching on the preceding, satisfiable prefix reveals the same answers for programs that ignore their row. This places true, expensive-to-certify missing edges inside every actual Hall witness. With near-linear SAT, batching the positive checks allows both the program pool and the individual offer clock to grow to $n/\operatorname{polylog}n$. A separate sampler for the common signed family makes bounded-time randomized decisions only slightly better than chance under that hypothesis. [First-failure witnesses](first-failure-hall-witnesses.md) · [Advice bounds and randomized sampler](seed-filter-advice.md) · [Canonical witness bits and easy promised verdicts](canonical-witness-pins.md)
 
+## What can a short description predict about an actual SAT run?
+
+Suppose a deterministic linear-time SAT solver and a fixed polylogarithmic-time decoder share arbitrary advice about a run. On some unsatisfiable inputs of length $n$, advice of at most a sufficiently small constant times $n/\log^7 n$ bits leaves at least $\Omega(n/(\log^7 n\log\log n))$ errors on distinct bit coordinates of words actually read before a write in their block. For whole words, let $M$ count distinct incoming block–address pairs and $R$ be the predicted word XOR the true word. Advice length plus $M$ times the empirical entropy of $R$ is at least $\Omega(n/\log^7 n)$. This still holds for conditional entropy when each pair receives one of at most $n^\alpha$ efficiently computed tags, for any fixed $0\le\alpha<1$, on the specified decoder grid. A weaker bound reaches a tag range of $n/\log^{8+\rho}n$ for each fixed $\rho>0$. [Proof, parameters and error correction](partial-domain-snapshot-errors.md) · [Finite filter semantics](CascadeSnapshotErrors.lean)
+
+A decoder may instead retain mutable scratch across reads within each forecast. A cumulative charge for description length and private work beyond a fixed per-prefix allowance is outside $O(n^{1.3622})$ unconditionally on unsatisfiable inputs. Under near-linear SAT there are at least $n/\operatorname{polylog}n$ genuine starting times on one run at which either the proposed description is long or its online reconstruction takes substantial time. Even an approximate predictor receiving the genuine native history after each guess has an unconditional cumulative lower bound, charging its advice, excess work, used tags and exceptions. A correct SAT solver can attain order $n^{1.97}$ in this charge on explicit inputs handled in $\Theta(n)$ time, by repeatedly scanning a validated inverse permutation. With the original short permutation source available, a padded version still reaches $n^{3/2}/\operatorname{polylog} n$ in linear time at the encoded-length relation of the square-clock diagonal. [Sharp linear-run counterexample](stateful-inverse-windows.md) · [Stateful replay and quantifiers](stateful-incoming-decoders.md) · [Cumulative clock in Lean](OnlineDecoderClock.lean)
+
+## Reading decision answers with a public isolation hash
+
+Assume SAT takes $O(n^d\operatorname{polylog}n)$ deterministic time for $d=1,2,3$. Infinitely many positive short inputs have isolated-proof families on which a decoder can see the whole random hash even after preprocessing. On almost every isolating tape at a suitable level, a fixed correct solver takes at least $n^{1/d}/\operatorname{polylog}n$ time on **both** pins for all but an inverse-polylogarithmic fraction of short random checksums. The two pins ask opposite questions about the same unique proof. The bound remains below the linear milestone. The proof charges a single product of advice length (plus the short-input length) and per-query work. [Long public tapes, proof sampling and decision runs](random-tape-decision-witnesses.md) · [Timely answers and erasures](timely-checksum-lines.md) · [Polynomial sampling obstruction](coset-sum-tape-obstruction.md) · [Constructing and checking the isolation hash](nested-witness-isolation.md)
+
+An independent unconditional result concerns a single actual rejecting run. At each large scale an explicit unsatisfiable formula forces a sufficiently slow run or a large constant-depth modular circuit for the chronological controller or the timestamps sorted by work address. A separate proof removes the sorted-timestamp function for runs with enough address reuse inside short blocks. On a set of distinct prehalt indices, one bit of the controller or the sorted timestamps resists prediction better than chance by all smaller circuits of this class, up to a vanishing advantage. Multiplication and division use the word-operation annotations specified in the proof. [Prehalt hard sets](trace-bit-hard-sets.md) · [Single-index check](one-index-solver-memory.md) · [Block verification](block-controller-addresses.md)
+
 ## Checking a global assertion at a solver checkpoint
 
 A checkpoint can assert that the entire writable array, after a locally specified change of coordinates, is a permutation of a prescribed sign. If a RAM block can break one such assertion starting from another, it can do so from a memory with at most $2q+4$ nonzero words, where $q$ counts the addresses accessed or pinned. This lets the verifier replay one sparse counterexample even when the actual memory is dense. With two simultaneous permutation assertions, deciding whether a single load can produce a specified value is NEXP-complete on succinct inputs. The reduction uses only two disjoint swaps per color. Both assertions hold on the genuine zero memory. The test ranges over all states they permit. On some succinct affirmative instances every memory triggering the load requires superpolynomial-size constant-depth modular circuits in the address width, unconditionally. [Sparse-window theorem](signed-permutation-checkpoints.md) · [Succinct reduction](rainbow-permutation-defects.md)
@@ -384,6 +396,18 @@ The individual notes distinguish literature precedents, elementary deductions, f
 Use Lean 4.19.0 with its bundled Std library and Python 3.11 or later. The finite permanent-grid and matching experiments use SymPy. The independent singleton optimization check uses NumPy and SciPy. Run from the repository root.
 
 ```sh
+lean CascadeSnapshotErrors.lean
+lean OnlineDecoderClock.lean
+python3 partial_domain_snapshot_audit.py
+python3 stateful_inverse_window_audit.py
+lean BlockAddressCertificates.lean
+lean DecisionTimeoutTail.lean
+lean SampledProofOracle.lean
+python3 one_index_memory_audit.py
+python3 nested_witness_isolation_audit.py
+python3 public_tape_pcp_audit.py
+python3 polynomial_tape_sums.py
+python3 timely_checksum_lines_audit.py
 lean SparsePermutationCompletion.lean
 lean PermutationWindowRigidity.lean
 lean TwoPermutationSwitch.lean
