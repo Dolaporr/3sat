@@ -8,6 +8,10 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+There is now a test for linear SAT using only programs that print zeros. Give a program a cost of its length plus the logarithm of its running time. For each word of n zeros, compare the best cost with the total weight of all programs printing it, where each program’s ordinary probability is divided by its running time. Linear SAT would bound the difference between the best cost and the negative logarithm of that weight by O(log log n), for every n on each fixed efficient interpreter. An ordinary interpreter can attain this order, even with any prescribed fixed coefficient as the interpreter varies. The search needs an unbounded ratio on one fixed interpreter. I also proved the upper bound unconditionally outside a quantitatively small set of lengths and constructed very deep lengths where the test still passes. [Unary test and the unsuccessful diagonal](unary-speed-gap.md) · [Ordinary examples attaining the scale](native-coding-delays.md) · [All-output bound](discounted-program-mass.md)
+
+A separate test asks whether two programs can match the best description of an ordered pair when both programs pay only once for the longer running time. Linear SAT would allow the split with logarithmic overhead in the pair’s optimal cost. I constructed pairs that incur an asymptotically sharp extra cost when the shorter running time also receives a positive charge. They leave the shared-time test open. [Splitting the description of a pair](shared-levin-clock.md)
+
 If SAT had a linear-time algorithm, the following coding bound would hold. Suppose a fixed randomized machine prints a particular word by time t with probability p. For words of polylogarithmic length in t, some deterministic program of at most ⌈log₂(1/p)⌉ + O(1) bits would print that word in time t · polylog(t), without being told the deadline. For much longer words, one program of the same length can answer each individual bit query within that clock when log₂(1/p) is polylogarithmic in t. An explicit sampler that violates either guarantee would rule out linear SAT. The constructed example that violates the first bound relies on an external oracle. [Full-word coding argument](near-clock-coding.md) · [Single program for bit queries](implicit-output-coding.md)
 
 A second consequence involves the combined probability of all programs that print a given word by a deadline. Linear SAT would force this probability to multiply by a power of m across Ω(m/log m) disjoint intervals for some m-bit words. At each sufficiently large m, words with this property would carry a constant fraction of the eventual probability of printing any m-bit word. Merely increasing the probability by a positive amount in many intervals happens unconditionally even for the all-zero word. [Probability growth across deadlines](mass-clock-cells.md) · [Interpreter comparison](occupied-clock-cells.md)
@@ -76,6 +80,12 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Reciprocal-time program mass](discounted-program-mass.md) | Relates the weighted mass to public-randomness Levin cost. Under linear SAT its negative logarithm approximates the deterministic best cost to logarithmic error. |
+| [Unary outputs at their own numeric deadlines](unary-speed-gap.md) | Reduces the target to one interpreter’s binary descriptions with a soft deadline and bounds the fraction of exceptional lengths unconditionally. |
+| [An ordinary interpreter with delayed generic programs](native-coding-delays.md) | Each fixed polylogarithmic slowdown can fail on a different efficient interpreter. The all-zero words also realize a nonconstant gap for reciprocal-time mass. |
+| [One time charge for two descriptions](shared-levin-clock.md) | Under linear SAT a split program can match joint Levin cost up to logarithmic error; ordinary two-charge examples saturate a different bound. |
+| [Sampling the interpreter’s current distribution](sampling-own-clock-law.md) | An efficient universal machine reproduces near its own deadlines the output laws of a class of routines that sample those same deadlines. |
+| [Induction on paired RAM memories](relational-memory-induction.md) | Affine constraints on shared hidden bits allow an exact test for inductive relations on large memories. A diagonal language still lacks enough certified equalities. |
 | [Coding timely sampling probability](near-clock-coding.md) | Approximate counts suffice to build a deterministic prefix decoder under linear SAT, even when a batch has too many entries to enumerate. |
 | [Recovering one bit of a long output](implicit-output-coding.md) | Under linear SAT a short field value distinguishes all the heavy outputs of one batch. One short program can answer every coordinate query. Full recovery of an arbitrary long output at that clock remains open. |
 | [Growth of a word’s timely program probability](mass-clock-cells.md) | Under linear SAT one set of outputs gains conditional probability by polynomial factors across many common deadline intervals. |
@@ -293,6 +303,11 @@ lean OccupiedClockCells.lean
 lean GrammarCell.lean
 lean ListedFastReplacements.lean
 lean NearClockCoding.lean
+lean SharedLevinClock.lean
+lean DiscountedMass.lean
+lean DensePrefixQueries.lean
+lean RelationalMemory.lean
+lean SampleClockFeedback.lean
 lean LowWeightPolynomial.lean
 lean CommonDistortion.lean
 lean PrefixPrediction.lean
@@ -311,6 +326,9 @@ python3 one_bit_production_experiment.py
 python3 rational_clock_experiment.py
 python3 adaptive_profile_experiment.py
 python3 near_clock_code_experiment.py
+python3 discounted_mass_experiment.py
+python3 relational_memory_experiment.py
+python3 sample_clock_feedback_experiment.py
 python3 implicit_output_experiment.py
 python3 rate_list_game.py
 python3 word_completion_experiment.py
