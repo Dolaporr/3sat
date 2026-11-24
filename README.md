@@ -6,11 +6,17 @@ The first target is to rule out a uniform deterministic **O(n)** worst-case algo
 
 We use binary-encoded literal indices, a conventional explicit formula encoding, words of Θ(log n) bits with a constant sufficient for the polynomial address range in use, and a fixed instruction set with ordinary word arithmetic, Boolean operations, and indirect reads and writes. Word operations have polylogarithmic-size Boolean implementations. Exact timing statements about promise families identify their encoding. A hard family of explicit width-three instances in this encoding would suffice for the general SAT target. Each target excludes the stated big-O bound. A matching big-Omega bound alone is compatible with it.
 
+## Cumulative writable memory on unsatisfiable formulas
+
+For every deterministic SAT solver on this RAM and every fixed $c<(1+\sqrt5)/2$, the worst-case cumulative cost on unsatisfiable formulas is not $O(n^c)$. At each instruction the sum charges one plus the number of currently nonzero writable words. There is no bound on elapsed time, peak workspace, or behavior on satisfiable inputs beyond soundness. If a separate near-linear recognizer for UNSAT exists, the cumulative cost lower bound for every deterministic recognizer approaches quadratic up to explicit logarithmic factors. The same golden-ratio bound holds if each step charges one unit plus the fewest bits describing its memory with polylogarithmic access time, given the input. The cumulative theorem leaves all three elapsed-time goals open. [Theorem, relation to the known time–peak-space bound, and proof](cumulative-sat-memory.md) · [Queryable descriptions and polynomial access times](cumulative-snapshot-descriptions.md) · [Finite argument in Lean](CumulativeSnapshotCuts.lean)
+
 ## Can a solver certify rejection without describing its whole history?
 
 An inductive invariant can describe many possible memories at once. On solver-dependent unsatisfiable inputs, a hypothetical linear-time solver needs $\Omega(n/\log^5 n)$ verification cost in the adaptive row-checking format defined in the journal. For a product of per-word predicates with nonempty allowed-value sets this is a lower bound on ordinary Boolean circuit size. The respective bounds for quadratic and cubic solvers are $\Omega(\sqrt n/\log^{5/2}n)$ and $\Omega(n^{1/3}/\log^2 n)$. A concrete identity transition shows why the choice of proof matters. Locating a failed old equation requires linearly many memory probes, while a parity identity certifies preservation with constant-size local checks on the public equations. [Solver theorem](adaptive-invariant-selectors.md) · [Separation on the same invariant](row-selection-gap.md) · [Dense affine implications](affine-row-cancellation.md)
 
 On an explicit parity-chain family of 3-CNFs, a sound rejection certificate of $s$ shared bits checked by at most $q$ packed input probes per challenge satisfies $(s+1)q=\Omega(n/\log n)$ if the format covers all rejections. Block parities attain the tradeoff. This places a limit on extracting small, locally checkable rejection proofs even from easy instances. [Proof, prior parity bounds and Lean verification](parity-chain-verdict-checks.md)
+
+A hypothetical linear-time solver also has an interval of $\Omega(\sqrt n/\log^6 n)$ steps before it halts on which every snapshot satisfies $sq=\Omega(n/\log^9 n)$ for every per-time description of $s$ bits answering all word queries in $q\le\sqrt n$ steps. Programs and preprocessing can differ at every time. The proof allows a bounded common data bank in addition. [Persistent query bound](persistent-snapshot-query-cost.md) · [Checkpoint circuits and input costs](bulk-snapshot-selection.md)
 
 ## A limit of the tape-graph approach
 
@@ -19,6 +25,8 @@ Two writable planar tapes can produce a $T$-step computation graph in which dele
 ## What quadratic and cubic solvers would have to compute
 
 For each correct $O(n^2)$ or $O(n^3)$ SAT solver on the specified load/store RAM, consider the function that takes a binary time and returns its registers and program counter on one actual input. On a family of unsatisfiable formulas, the Boolean circuit sizes of these functions are respectively $\Omega(n^{1/4}/\log^{13/4}n)$ and $\Omega(n^{1/9}/\log^{7/3}n)$. There is no space cap. A shortcut can recognize a fixed diagonal family once another solver has been diagonalized against; this change of solver explains why the uniformity of the formulas has not produced the unrestricted time lower bound. [Register-history proof](chronological-solver-registers.md) · [Memory check, shared hard families and recognition shortcut](succinct-memory-defects.md)
+
+There is also a direct bound on a summary that answers queries for every address and time up to the first rejecting halt. For a fixed decoder using constant time, the summary needs $\Omega(\sqrt n/\log^{3/2} n)$ bits for a quadratic-time SAT solver and $\Omega(n^{1/3}/\log n)$ bits for a cubic-time solver, on solver- and decoder-dependent unsatisfiable inputs. [Proof and the tradeoff for adaptive probes](polynomial-solver-state-queries.md)
 
 ## What a linear-time solver would have to store
 
