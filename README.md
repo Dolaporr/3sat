@@ -2,11 +2,13 @@
 
 ## Research goal
 
-A proof that ordinary explicit SAT has no uniform deterministic **O(n)** worst-case algorithm on a standard logarithmic-word RAM with unrestricted workspace is sufficient to complete this project. Here n counts bits in the encoded formula. Exclusions of **O(n²)** and **O(n³)** remain successively stronger goals. All three targets are open in this journal. To meet the linear target, the proof must show that for every correct deterministic solver the ratio of worst-case time to encoded input length is unbounded. Equivalently, for every correct solver, every constant C and every length threshold N, some formula of encoded length n≥N requires more than Cn steps. A bound such as Ω(n log log n) would meet the linear goal. An unbounded ratio along a subsequence also suffices.
+The first target is to rule out a uniform deterministic **O(n)** worst-case algorithm for ordinary explicit SAT on a standard logarithmic-word RAM with unrestricted workspace. An unconditional proof of this linear target alone completes the project. Here n counts bits in the encoded formula. Exclusions of **O(n²)** and **O(n³)** remain successively stronger goals. All three targets are open in this journal. To meet the linear target, the proof must show that for every correct deterministic solver the ratio of worst-case time to encoded input length is unbounded. Equivalently, for every correct solver, every constant C and every length threshold N, some formula of encoded length n≥N requires more than Cn steps. A bound such as Ω(n log log n) would meet the linear goal. An unbounded ratio along a subsequence also suffices.
 
 We use binary-encoded literal indices, a conventional explicit formula encoding, words of Θ(log n) bits with a constant sufficient for the polynomial address range in use, and a fixed instruction set with ordinary word arithmetic, Boolean operations, and indirect reads and writes. Word operations have polylogarithmic-size Boolean implementations. Exact timing statements about promise families identify their encoding. A hard family of explicit width-three instances in this encoding would suffice for the general SAT target. Each target excludes the stated big-O bound. A matching big-Omega bound alone is compatible with it.
 
 ## Current results
+
+For the linear target, I changed the search from finding an individual missing output to certifying a count across input lengths. Among lengths from 2ʲ through 2ʲ⁺¹−1, the fraction with an early missing output tends to one as j grows. The last block whose exceptional fraction exceeds 2⁻ᵏ is bounded above and below by busy beaver values with arguments k+O(1) and k−O(1). A sufficiently small SAT certificate for one favorable block at each of unboundedly many precisions would exclude linear-time SAT. Constructing those certificates remains open. [Counting across lengths](prefix-lengths.md)
 
 For the cubic target, I found a criterion that tolerates false proofs. Let v be the first n-bit word omitted by a bounded universal machine, and W(z) the number of proofs accepted by a short verifier for word z. If a cubic SAT solver exists, every consecutive interval of K words immediately below v on which each word has more proofs than v must satisfy K+1 ≤ C(W(v)+1), for a fixed verifier-dependent constant C. A second test checks all program–output candidates jointly by matching. It tolerates ambiguous rows and matchings that change with the public challenge. The missing ingredient is a verifier that violates either bound on the actual outputs. [Witness-count criterion](multiplicity-dips.md) · [Matching and Hall certificates](matching-holes.md)
 
@@ -52,6 +54,10 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Prefix-free programs across input lengths](prefix-lengths.md) | A global Kraft bound gives dense blocks of favorable lengths. Their convergence has no computable modulus. A checkable upper bound on the exceptions in one block would suffice under an explicit clock. |
+| [Coordinate tests on one omitted word](coordinate-omissions.md) | An adaptive exposure inequality bounds the number of local witness-count dips, accounting for advice and dependence on other coordinates. |
+| [Computations stored in fewer physical cells](address-folding.md) | Faithful replay can be checked one virtual address at a time under linear SAT. Five binary operations per address can already force a separate physical cell for every address. |
+| [Program outputs with shared answers](shared-answer-coverage.md) | If all admissible tables are injective and the shared bits obey affine constraints, depth k per row permits at most 2ᵏ possible holes. The bound is attained. |
 | [Multiplicity of proofs near the first missing word](multiplicity-dips.md) | A one-witness advantage throughout a sufficiently long interval would exclude cubic SAT, even with false proofs at its endpoint. The integer-array packing bound has an exact finite maximum. |
 | [Matching program names to candidate words](matching-holes.md) | The actual omitted word must remain among many possible matching holes even after intersecting over public challenges, assuming cubic SAT. Sparse candidate lists alone can leave all holes possible. |
 | [The first incorrect read](first-fault-cache.md) · [Recovering the incoming words](native-first-reads.md) | Linear SAT would force many potential first faults on one genuine trajectory and expensive incoming-word predictions on every genuine producer of many predecessors. |
@@ -201,6 +207,12 @@ lean FirstReadReplay.lean
 lean HoleExchange.lean
 lean MultiplicityDips.lean
 lean StackPacket.lean
+lean PrefixLengthMass.lean
+lean CoordinateOmissions.lean
+lean AddressFolding.lean
+lean SharedAnswerMass.lean
+python3 coordinate_omissions_experiment.py
+python3 shared_answer_coverage_experiment.py
 python3 hole_exchange_experiment.py
 python3 multiplicity_dips_experiment.py
 python3 native_first_reads_experiment.py
