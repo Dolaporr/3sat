@@ -8,6 +8,8 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+The latest test uses candidate lists that may be wrong. Even infinitely many successful lists would suffice to exclude linear SAT if their total normalized size were computable and each list could be obtained through a sufficiently small SAT test. An adaptive procedure gave a counterexample to replacing computability by a known upper bound: its cost is at most 3/2, but the fractional part encodes halting information. This leads to a proof search for positive claims about actual program outputs on failed windows. Short programs certify all the claims on an infinite explicit subfamily; enough other failures still lack certificates. [Adaptive lists, positive witnesses and the missing bound](adaptive-window-lists.md) · [Shortening a group proof](shorter-window-proofs.md)
+
 One bit about the fraction of exceptional lengths would suffice for a lower bound. If a uniform SAT formula can certify this bit on infinitely many blocks, within the specified size, linear-time SAT is impossible. The verifier can even make mistakes at a quantified rate. I found explicit windows in which at least half the blocks have the desired bit. Turning that group argument into a short proof for even one block in infinitely many windows remains open. [One-bit criterion, failed predictors and individual proof lengths](exceptional-fraction-bit.md)
 
 For the linear target, I changed the search from finding an individual missing output to certifying a count across input lengths. Among lengths from 2ʲ through 2ʲ⁺¹−1, the fraction with an early missing output tends to one as j grows. The last block whose exceptional fraction exceeds 2⁻ᵏ is bounded above and below by busy beaver values with arguments k+O(1) and k−O(1). A sufficiently small SAT certificate for one favorable block at each of unboundedly many precisions would exclude linear-time SAT. Constructing those certificates remains open. [Counting across lengths](prefix-lengths.md)
@@ -56,6 +58,11 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Lists that need only sometimes succeed](adaptive-window-lists.md) | A finite total normalized list size must have random fractional part if fast lists hit good blocks infinitely often. Enough short proofs of positive producer claims on failed windows would refute linear SAT. |
+| [Shortening a group proof](shorter-window-proofs.md) | Any unbounded shortening factor would suffice for certified lists. Copying real producer programs gives a convolution inequality, but nearby scales can have very different exceptional fractions. |
+| [Shifting and anonymizing omissions](anonymous-omissions.md) | An aggregate report exceeding the square-root surplus would identify a small list containing the native omission. Taking the union over all genuine holes falls short. |
+| [When one producer accounts for a predicted output](exclusive-owner.md) | For independent groups with few anomalous predictions on average, near-native counting isolates one group at the actual missing word under linear SAT. |
+| [Relative output equations on parity fibers](parity-fibers.md) | A few certified parity comparisons across predictors would yield a contradiction via a sparse slope. The missing ingredient is a verifier that runs faster than replay. |
 | [One bit about exceptional lengths](exceptional-fraction-bit.md) | On every fast infinite list both values of the bit have upper relative density one. A simple predictor achieves logarithmic accuracy one. The two notions of accuracy give different SAT criteria. |
 | [Limits of fast producer covers](delayed-prefix-covers.md) | A self-referential program prevents a sound finder from excluding any entries of one fixed prefix at all large lengths, even when none of the programs there halts. |
 | [Late outputs across many lengths](time-by-length.md) | Linear SAT forces almost all words in many complete prefix blocks to acquire their first short producer during a final interval of the native clock. |
@@ -222,6 +229,12 @@ lean ClockRelease.lean
 lean DelayedPrefixCover.lean
 lean ExceptionalBands.lean
 lean TimeByLength.lean
+lean WindowLists.lean
+lean AnonymousOmissions.lean
+lean ExclusiveOwner.lean
+lean ParityFibers.lean
+python3 window_lists_experiment.py
+python3 exclusive_owner_experiment.py
 python3 near_native_counting_experiment.py
 python3 coordinate_omissions_experiment.py
 python3 shared_answer_coverage_experiment.py
