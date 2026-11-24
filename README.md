@@ -4,6 +4,8 @@
 
 We use binary-encoded literal indices, a conventional explicit formula encoding, words of Θ(log n) bits with a constant sufficient for the polynomial address range in use, and a fixed instruction set with ordinary word arithmetic, Boolean operations, and indirect reads and writes. Word operations have polylogarithmic-size Boolean implementations. Exact timing statements about promise families identify their encoding. A hard family of explicit width-three instances in this encoding would suffice for the general SAT target. At the endpoints a bound of Ω(n³) alone would still allow O(n³).
 
+For the first missing output of the diagonal machine, a single certificate can cover many preceding words. Almost-complete coverage on one interval ending at that output would suffice, even if its length is unknown. A concrete version asks for short circuits that answer a probabilistic proof verifier's queries on those predecessors. I also tested a competing-prover game built directly from the gates of the diagonal computation. Its independent questions are cheap, but its decision gap can be exponentially small in circuit depth. [Batch coverage at every scale](predecessor-batches.md) · [Proof circuits and competing witnesses](referee-certificates.md)
+
 A suggested permanent-graph lower bound gives a precise test for transferring an algebraic decision result to SAT. Its generic-path argument survives on a large finite integer grid. On Boolean matrices the same tree model decides the permanent graph in depth m²+1 by storing an answer at each leaf. We also checked what happens if the complex machine can call an oracle on explicit Boolean strings. [Integer-grid calculation](pr249-grid.md) · [Boolean oracle calls](pr249-oracles.md) · [Original PR #249](https://github.com/1337isnot1337/solved-conjectures/pull/249)
 
 The current search reduces cubic SAT exclusion to a question about two marked addresses per length. For one explicit exponential-time language, a fixed nondeterministic predicate running in 2ⁿ poly(n) time would suffice if it catches either mark on infinitely many lengths while accepting a vanishing fraction of all addresses along those lengths. False positives are allowed. The construction uses time-bounded incompressibility, and the outstanding step is to exhibit that predicate. A separate construction studies what parity information can be recovered from two or three unknown points over a finite field. [Two marked addresses](address-diagonal.md) · [Field moment construction](advised-claims.md) · [Information in support coordinates](moment-information.md)
@@ -32,6 +34,9 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Joint certificates before the first missing output](predecessor-batches.md) | A sharp interval bound allows false positives and unknown interval lengths. Under cubic SAT every trailing interval retains a fixed fraction of predecessors outside a sound batch verifier's coverage, up to an endpoint term. |
+| [Competing witnesses and probabilistic proof circuits](referee-certificates.md) | A perfect refutation reduces to three bounded quantifiers. A sampled check handles bounded likelihood ratios. A local gate game achieves independent questions for the actual computation but misses the required quantitative gap. |
+| [Repairing approximate phase products](phase-products.md) · [Pairing dense errors](paired-phase-products.md) | A batched SAT test can verify the locations of defects in a guessed tree of block products. A second verifier can cancel dense inverse pairs, including schedules whose midpoint is PSPACE-hard. |
 | [Permanent graph decision trees](pr249-grid.md) · [Discrete oracles](pr249-oracles.md) | The algebraic graph test transfers to an explicit large integer grid. A Boolean matrix admits an unrestricted-size tree of depth m²+1. A nonuniform tree can also absorb ordinary SAT-oracle answers to explicit bit queries. |
 | [Two marked addresses](address-diagonal.md) | A list hitting one mark can have vanishing density and arbitrary false positives. A forward-probe swap argument limits how well certificates can narrow a unique missing value in an oracle model. |
 | [A bounded amount of advice](advised-claims.md) | An ordinary language with two or three untagged marks resists sound parity predictions past the advice budget. Small lists locating actual marks would suffice under a cubic SAT hypothesis. |
@@ -130,6 +135,9 @@ lean TailAdvice.lean
 lean AdvisedClaims.lean
 lean RangeDecisions.lean
 lean TallySpan.lean
+lean GapMaximal.lean
+lean PhaseProducts.lean
+lean RefereeSupport.lean
 python3 history_experiment.py
 python3 phase_experiment.py
 python3 filling_experiment.py
@@ -138,6 +146,7 @@ python3 conserved_observation_experiment.py
 python3 coded_diagonal_experiment.py
 python3 tail_advice_experiment.py
 python3 advised_claims_experiment.py
+python3 referee_experiment.py
 python3 even_jets_experiment.py
 python3 transcript_experiment.py
 python3 local_experiment.py
