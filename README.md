@@ -4,6 +4,8 @@
 
 We use binary-encoded literal indices, a conventional explicit formula encoding, words of Θ(log n) bits with a constant sufficient for the polynomial address range in use, and a fixed instruction set with ordinary word arithmetic, Boolean operations, and indirect reads and writes. Word operations have polylogarithmic-size Boolean implementations. Exact timing statements about promise families identify their encoding. A hard family of explicit width-three instances in this encoding would suffice for the general SAT target. Each target excludes the stated big-O bound. A matching big-Omega bound alone is compatible with it.
 
+One test of the linear-time hypothesis now reaches the graph of block visits in an actual unary hierarchy computation. Under that hypothesis, at infinitely many accepted lengths every accepting run of the chosen verifier must have nearly linear treewidth in its number of epochs. Two writable tapes can already realize graphs of linear treewidth with three reversals on one head and two on the other. The open step is finding an accepting run whose words across the cuts have shorter descriptions, or a verifier whose graph has smaller cuts. [Tape partitions and the two-tape construction](tape-partitions.md)
+
 For the linear target, I tested what an O(n) SAT solver would imply for checking long computation histories. It would decide an O(N)-space nondeterministic tape computation on N input bits in deterministic time 2^{O(√(N log N))}. It would also let a verifier check many partial tape transitions in time quasilinear in their combined description length. A lower bound for unrestricted SAT still requires showing that a computation with a known time lower bound admits sufficiently short checks. [Quantifier elimination and checkpoint lengths](linear-quantifiers.md) · [Checking adaptive queries together](linear-sat-batches.md) · [Partial transitions and the equality test](epoch-dictionaries.md)
 
 The permanent graph proof from PR 249 still applies if a verifier searches over finite binary witnesses. At a generic complex input one can make every test in a countable family agree on a graph point and an off-graph point. For an integer grid we quantify the input precision needed as the number of tests grows. This yields no superlinear bound in the encoded bit length. [Boolean witnesses on the permanent graph](pr249-witnesses.md) · [Original PR](https://github.com/1337isnot1337/solved-conjectures/pull/249)
@@ -40,6 +42,10 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Partitioning the tape visits](tape-partitions.md) | A universally selected part of an accepting run can be checked with the descriptions of the words on its ancestral cuts. Two writable tapes already realize expander minors. |
+| [Checking changed cells](checkpoint-pullbacks.md) | Following a cell to its source can determine the truth of a proposed update even over an unknown starting memory. No qualifying shared description has been obtained for enough actual diagonal outputs. |
+| [Simultaneous time and space](simultaneous-space.md) | A specific language has separate fast and small-space algorithms. A combined bound or a sufficiently short one-tape head movement on a hierarchy source would exclude linear SAT. |
+| [Tuning the first missing output](tuned-first-hole.md) | A fixed universal decoder can make an arbitrarily high constant fraction of preceding addresses easy. Allowing this fraction to tend to one incurs a matching cost in the decoder header for this construction. |
 | [Adaptive batches under linear SAT](linear-sat-batches.md) | Checking the answer transcript lets a deterministic decoder pay for one controller replay and one oracle test. A resulting bound on the actual producers still leaves a missing compression step. |
 | [Growing-depth checkpoint checks under linear SAT](linear-quantifiers.md) | Quasilinear elimination at each block gives a quantitative time simulation for short configurations. It still pays for the configuration bits of the computation being checked. |
 | [Discrete witness families on the permanent graph](pr249-witnesses.md) | The finite-grid calculation handles proofs chosen separately on each input, including randomized checks. It still requires many bits per matrix entry. |
@@ -158,6 +164,11 @@ lean ProbeAllocation.lean
 lean LocalBagConsistency.lean
 lean RankAllocation.lean
 lean EpochDictionary.lean
+lean PartitionWitness.lean
+lean StackVisit.lean
+lean PullbackEvaluation.lean
+lean TapeTravel.lean
+lean TunedFirstHole.lean
 python3 history_experiment.py
 python3 phase_experiment.py
 python3 filling_experiment.py
@@ -169,6 +180,7 @@ python3 advised_claims_experiment.py
 python3 referee_experiment.py
 python3 probe_allocation_experiment.py
 python3 unranking_experiment.py
+python3 tape_routes_experiment.py
 python3 even_jets_experiment.py
 python3 transcript_experiment.py
 python3 local_experiment.py
