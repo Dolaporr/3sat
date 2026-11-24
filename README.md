@@ -8,6 +8,12 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+The latest linear-SAT test can be stated using only shortest program lengths at two clocks. For each word, measure how much its best description improves when the deadline grows by a polynomial factor. Under linear SAT the sum of these improvements over words whose best descriptions are within ⌈log₂ log₂ m⌉ bits of their length m must be algorithmically random, with the precise weighting below. The argument also forces random sums at particular fixed description-length savings, with gaps of at most logarithmic size between them. Showing sufficiently large gaps would suffice. Removing the length restriction makes the sum random unconditionally, by an explicit family of short programs. [Clocked complexity increments](clocked-complexity-increments.md)
+
+On a constructed optimal prefix machine, a positive fraction by weight of selected words have a shortest program of exactly m−1 bits whose earliest completion takes between 2^(3m) and 2^(5m) steps. An m-bit program prints each of the same words in quasilinear time. This is unconditional. Under linear SAT the slow endpoint can be confined to a polynomial factor of a prescribed deadline. A second test on a single fixed machine lets the required description-length saving grow with the phase. [One additional description bit](one-bit-production.md) · [Growing description-length savings](varying-description-savings.md)
+
+The weighted averages of the remaining production-time distributions converge to a particular measure. The second Turing jump can compute it. Computing it with the first jump would rule out linear SAT. A bounded computable observation on the same phase weights attains the second-jump bound, so improving it requires a property of the actual first production times. [Canonical tail limit and counterexample](tail-rate-mixtures.md)
+
 One sufficient condition for ruling out linear SAT concerns the limits of an explicit sequence of distributions. Each distribution records when the first short programs for specified words finish on a fixed universal machine. It would suffice to find even one limiting distribution on the specified phases that can be approximated by a computable sequence, without knowing how fast those approximations converge. Under linear SAT, every such limit would instead have a positive atom at every limit-computable rate in [3,4]. A general compactness argument does not yield the needed limit. [Proof and compactness counterexample](phase-limit-measures.md) · [Distribution across a growing number of rates](rate-bin-credits.md)
 
 A partial proof can now receive credit for each target word it certifies. On a fixed universal machine, even the first short programs for a positive fraction of the selected words take between 2^(3m) and 2^(9m) steps at infinitely many stages, where m is output length. The connection to linear SAT requires a fast verifier that captures enough actual outputs on the specified stages. One program family fills omissions of a proposed verifier, and the next verifier can recognize its outputs. Under linear SAT the same construction would force many first outputs into a time interval ending at a prescribed clock, even when its endpoints differ by only a polynomial factor in m. [Word-by-word proof costs and first production times](word-completion-cost.md) · [Allocating halting probability to actual outputs](fifo-producer-credits.md) · [Prescribed production deadlines](near-clock-credits.md)
@@ -62,6 +68,12 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [A series over words at two clocks](clocked-complexity-increments.md) | Linear SAT would force randomness of the clock-increment sum even for almost incompressible words. Dropping the length band gives unconditional randomness via simple diagonal words. |
+| [The fastest shortest program and one more bit](one-bit-production.md) | A prefix-universal source has many words with an exponentially slow shortest description and a quasilinear description just one bit longer. Changing the padding rule gives an upper bound but costs the compiler the same saving. |
+| [Increasing the required program-length saving](varying-description-savings.md) | The word masses at all savings D, scaled by 2^D, are jointly summable. Linear SAT would still force a positive normalized share near a fixed deadline at any timely selected D=g(r)≤r/3. |
+| [Canonical tail mixtures](tail-rate-mixtures.md) | A specific weak average lies at most one Turing jump above what is needed for a SAT separation. A different computable observation on the same weights attains that upper bound. |
+| [Description costs and local affine dimension](phase-rank-and-description.md) | Under linear SAT, even after removing highly compressible words, the high-phase limits have unbounded affine dimension in every weak neighborhood of a limit point. |
+| [A staggered output clock](staggered-release.md) | An explicit modified source has atomless log-rates. Its delays or the cost of representing an eligible suffix prevent the native clock transfer. |
 | [Weak limits of first-production rates](phase-limit-measures.md) | Linear SAT would force every limit along certain phases to have atoms at all limit-computable rates in [3,4]. Exhibiting one limit-computable member even of the closed convex hull would exclude linear SAT. |
 | [Many rate intervals at once](rate-bin-credits.md) | One stream decoder funds every bin in an exponentially growing library on common phases. Each weak limit there dominates a positive multiple of Lebesgue measure over [3,4]. |
 | [Paying for individual output words](word-completion-cost.md) | On infinitely many failed masks, a positive fraction of selected lengths have a positive fraction of genuinely new words between explicit cutoffs. A sufficiently complete fast proof of production would exclude linear SAT. |
@@ -241,6 +253,9 @@ lean ClockRelease.lean
 lean DelayedPrefixCover.lean
 lean ExceptionalBands.lean
 lean TimeByLength.lean
+lean OneBitProduction.lean
+lean TailCapacity.lean
+lean StaggeredRelease.lean
 lean RateBinCredits.lean
 lean FifoProducerCredits.lean
 lean WordCompletion.lean
@@ -250,6 +265,7 @@ lean WindowLists.lean
 lean AnonymousOmissions.lean
 lean ExclusiveOwner.lean
 lean ParityFibers.lean
+python3 one_bit_production_experiment.py
 python3 word_completion_experiment.py
 python3 suffix_image_experiment.py
 python3 window_lists_experiment.py
