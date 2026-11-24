@@ -10,6 +10,8 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 For every fixed time exponent below $2\cos(\pi/7)$, a deterministic SAT solver meeting that clock must reach states for which a fixed decoder cannot simultaneously use a subpolynomial-length description and subpolynomial time per word. The decoder receives the physical input and the instruction time. A nested checkpoint test needs correctness only from a genuine predecessor. This permits consecutive speedups in the published alternation-trading proof. No bound on the solver's physical workspace is assumed. [Statement, quantifiers and hierarchy argument](true-start-snapshot-trading.md)
 
+A solver running in $N^{8/5+o(1)}$ time on unsatisfiable inputs must, for each fixed decoder, have arbitrarily long inputs of that sign with $\lceil N^{79/80}\rceil$ consecutive states where $N^{1/100}$ bits of advice and $N^{1/100}$ word-lookup steps do not suffice together. [Signed-window bound](signed-snapshot-windows.md) · [Linear-time example testing the limit of this approach](inverse-snapshot-frontier.md)
+
 At near-linear time an explicit construction gives a whole family with the SAT verdict of parity. On **every** odd payload, hard indexed snapshots survive permuting a specified number of arbitrary clauses. Another choice of guard makes hard indexed snapshots, later native reads of old data, and difficult proof queries occur on the same actual rejecting run. The charges proved for those distinct reads still fit a linear clock. [Indexed snapshots and clause permutations](guarded-indexed-snapshots.md) · [Disjoint discovery intervals](noisy-dual-solver-cuts.md)
 
 ## What must a solver retrieve after it has read half the data?
