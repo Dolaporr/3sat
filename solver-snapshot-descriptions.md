@@ -106,3 +106,5 @@ $$
  \end{aligned}
 $$
 Indeed $r^2G L=O(\eta H/(K L^{a+d}))+\operatorname{poly}(L)$ and $rG L=O(\sqrt\eta\,H/(K L^{a+d+1}))+\operatorname{poly}(L)$. The replacement rows meet the same query exponent. Choose $K$ for the worst constant in the two checks. Choosing $\eta$ sufficiently small now makes the independent branch finish within the interpreter deadline as well. This contradiction proves the sum bound, and division by the number of internal times proves the single-row bound. The statements concern the specified actual rejecting traces and leave unrestricted SAT time open.
+
+Lean verifies the effect of overlaying the latest write at each patched address, including writes of zero. It also bounds the patched row sizes individually and in total given the finite gap and heavy-row caps. The static dictionary, uniform reduction and diagonal timing are manuscript arguments. [Coarse checkpoint patches in Lean](CoarseSnapshotPatches.lean)
