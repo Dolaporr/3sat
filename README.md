@@ -8,7 +8,11 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
-The latest test uses candidate lists that may be wrong. Even infinitely many successful lists would suffice to exclude linear SAT if their total normalized size were computable and each list could be obtained through a sufficiently small SAT test. An adaptive procedure gave a counterexample to replacing computability by a known upper bound: its cost is at most 3/2, but the fractional part encodes halting information. This leads to a proof search for positive claims about actual program outputs on failed windows. Short programs certify all the claims on an infinite explicit subfamily; enough other failures still lack certificates. [Adaptive lists, positive witnesses and the missing bound](adaptive-window-lists.md) · [Shortening a group proof](shorter-window-proofs.md)
+One sufficient condition for ruling out linear SAT concerns the limits of an explicit sequence of distributions. Each distribution records when the first short programs for specified words finish on a fixed universal machine. It would suffice to find even one limiting distribution on the specified phases that can be approximated by a computable sequence, without knowing how fast those approximations converge. Under linear SAT, every such limit would instead have a positive atom at every limit-computable rate in [3,4]. A general compactness argument does not yield the needed limit. [Proof and compactness counterexample](phase-limit-measures.md) · [Distribution across a growing number of rates](rate-bin-credits.md)
+
+A partial proof can now receive credit for each target word it certifies. On a fixed universal machine, even the first short programs for a positive fraction of the selected words take between 2^(3m) and 2^(9m) steps at infinitely many stages, where m is output length. The connection to linear SAT requires a fast verifier that captures enough actual outputs on the specified stages. One program family fills omissions of a proposed verifier, and the next verifier can recognize its outputs. Under linear SAT the same construction would force many first outputs into a time interval ending at a prescribed clock, even when its endpoints differ by only a polynomial factor in m. [Word-by-word proof costs and first production times](word-completion-cost.md) · [Allocating halting probability to actual outputs](fifo-producer-credits.md) · [Prescribed production deadlines](near-clock-credits.md)
+
+An earlier test uses candidate lists that may be wrong. Even infinitely many successful lists would suffice to exclude linear SAT if their total normalized size were computable and each list could be obtained through a sufficiently small SAT test. An adaptive procedure gave a counterexample to replacing computability by a known upper bound: its cost is at most 3/2, but the fractional part encodes halting information. This leads to a proof search for positive claims about actual program outputs on failed windows. Short programs certify all the claims on an infinite explicit subfamily; enough other failures still lack certificates. [Adaptive lists, positive witnesses and the missing bound](adaptive-window-lists.md) · [Shortening a group proof](shorter-window-proofs.md)
 
 One bit about the fraction of exceptional lengths would suffice for a lower bound. If a uniform SAT formula can certify this bit on infinitely many blocks, within the specified size, linear-time SAT is impossible. The verifier can even make mistakes at a quantified rate. I found explicit windows in which at least half the blocks have the desired bit. Turning that group argument into a short proof for even one block in infinitely many windows remains open. [One-bit criterion, failed predictors and individual proof lengths](exceptional-fraction-bit.md)
 
@@ -58,6 +62,14 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Weak limits of first-production rates](phase-limit-measures.md) | Linear SAT would force every limit along certain phases to have atoms at all limit-computable rates in [3,4]. Exhibiting one limit-computable member even of the closed convex hull would exclude linear SAT. |
+| [Many rate intervals at once](rate-bin-credits.md) | One stream decoder funds every bin in an exponentially growing library on common phases. Each weak limit there dominates a positive multiple of Lebesgue measure over [3,4]. |
+| [Paying for individual output words](word-completion-cost.md) | On infinitely many failed masks, a positive fraction of selected lengths have a positive fraction of genuinely new words between explicit cutoffs. A sufficiently complete fast proof of production would exclude linear SAT. |
+| [Assigning halting weight to actual words](fifo-producer-credits.md) | A single compiler spends each halting program's credit on distinct words missed by the verifier. A finite number of rounds with shared demand order has a single combined capacity. |
+| [First outputs near a prescribed clock](near-clock-credits.md) | Under linear SAT every fixed finite set of deadlines has simultaneous positive fractions of first outputs near those deadlines on the same infinitely many phases. |
+| [Extending a verifier for whole blocks](producer-proof-extension.md) | A shared generator certifies additional bad blocks, exceeding the heavy-length threshold by a chosen factor in every sufficiently late phase. |
+| [Parity tests after shared preprocessing](snapshot-parities.md) | A selector can keep just one word of state. Universal checks attain independent equations at a nearby support bound, with an explicit mismatch in the required number of state bits. |
+| [Surjectivity with a hidden key](suffix-image-certificates.md) | A public top coefficient certifies all labels across hidden lower coefficients. Disjoint faces give a sharp bound on how many labels can be lost to erroneous program rows. |
 | [Lists that need only sometimes succeed](adaptive-window-lists.md) | A finite total normalized list size must have random fractional part if fast lists hit good blocks infinitely often. Enough short proofs of positive producer claims on failed windows would refute linear SAT. |
 | [Shortening a group proof](shorter-window-proofs.md) | Any unbounded shortening factor would suffice for certified lists. Copying real producer programs gives a convolution inequality, but nearby scales can have very different exceptional fractions. |
 | [Shifting and anonymizing omissions](anonymous-omissions.md) | An aggregate report exceeding the square-root surplus would identify a small list containing the native omission. Taking the union over all genuine holes falls short. |
@@ -229,10 +241,17 @@ lean ClockRelease.lean
 lean DelayedPrefixCover.lean
 lean ExceptionalBands.lean
 lean TimeByLength.lean
+lean RateBinCredits.lean
+lean FifoProducerCredits.lean
+lean WordCompletion.lean
+lean ProducerProofExtension.lean
+lean ParitySnapshots.lean
 lean WindowLists.lean
 lean AnonymousOmissions.lean
 lean ExclusiveOwner.lean
 lean ParityFibers.lean
+python3 word_completion_experiment.py
+python3 suffix_image_experiment.py
 python3 window_lists_experiment.py
 python3 exclusive_owner_experiment.py
 python3 near_native_counting_experiment.py
