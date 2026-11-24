@@ -8,6 +8,10 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+If SAT had a linear-time algorithm, the following coding bound would hold. Suppose a fixed randomized machine prints a particular word by time t with probability p. For words of polylogarithmic length in t, some deterministic program of at most ⌈log₂(1/p)⌉ + O(1) bits would print that word in time t · polylog(t), without being told the deadline. For much longer words, one program of the same length can answer each individual bit query within that clock when log₂(1/p) is polylogarithmic in t. An explicit sampler that violates either guarantee would rule out linear SAT. The constructed example that violates the first bound relies on an external oracle. [Full-word coding argument](near-clock-coding.md) · [Single program for bit queries](implicit-output-coding.md)
+
+A second consequence involves the combined probability of all programs that print a given word by a deadline. Linear SAT would force this probability to multiply by a power of m across Ω(m/log m) disjoint intervals for some m-bit words. At each sufficiently large m, words with this property would carry a constant fraction of the eventual probability of printing any m-bit word. Merely increasing the probability by a positive amount in many intervals happens unconditionally even for the all-zero word. [Probability growth across deadlines](mass-clock-cells.md) · [Interpreter comparison](occupied-clock-cells.md)
+
 One candidate separation now concerns a single word’s successive shortest programs. At each large length m, count how often the best description of one word improves between times 2³ᵐ and 2⁴ᵐ, among words having a final description of at most 3⌈log₂(m+2)⌉ bits. On every efficient universal machine I can force at least a constant times √m improvements on some such word, unconditionally. Linear SAT would force at least a constant times m/log m at every large length. Finding one machine with a smaller count along an unbounded sequence of lengths would suffice if its ratio to m/log m tends to zero. A machine that publishes only at scheduled times attains an upper bound of order m/log m, with an arbitrarily small fixed coefficient as the machine varies. [Conditional count](successive-description-times.md) · [Unconditional square-root count](adaptive-description-times.md)
 
 A fixed additive gap now suffices for one test of the linear-time target. For each output word of length m, record how many bits its shortest program saves over m at a late deadline. Under the linear-SAT hypothesis the two-clock sum must be algorithmically random for at least one saving in every H consecutive savings, for a constant H depending on the machine. A single efficient universal machine with arbitrarily long gaps would therefore rule out O(n) time for SAT. I constructed machines with any prescribed fixed gap size, and even prescribed bounded-gap patterns indexed by enumerable processes. The construction still needs a finite bound on each machine’s gaps. [Conditional constant-gap bound](exact-saving-blocks.md) · [Which patterns a machine can realize](programmable-clock-spectrum.md)
@@ -72,6 +76,13 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Coding timely sampling probability](near-clock-coding.md) | Approximate counts suffice to build a deterministic prefix decoder under linear SAT, even when a batch has too many entries to enumerate. |
+| [Recovering one bit of a long output](implicit-output-coding.md) | Under linear SAT a short field value distinguishes all the heavy outputs of one batch. One short program can answer every coordinate query. Full recovery of an arbitrary long output at that clock remains open. |
+| [Growth of a word’s timely program probability](mass-clock-cells.md) | Under linear SAT one set of outputs gains conditional probability by polynomial factors across many common deadline intervals. |
+| [Comparing changes across native interpreters](occupied-clock-cells.md) | On a fixed time grid, for each word the number of intervals where its shortest program improves is comparable across all efficient interpreters. |
+| [Fast names for the same output](listed-fast-replacements.md) | A fast and a slow program can both be globally shortest, even when predicting any fast name from the slow one needs more than a prescribed logarithmic advice budget at the early deadline. |
+| [Two interpreters at individual clock rates](paired-rate-interpreters.md) | Machines with the same program outputs can differ at each nonmultiple of a fixed integer saving, at almost every rate for the specified distributions. |
+| [Grammars for batches of RAM histories](batch-trace-grammar.md) | On one universal interpreter, genuine predecessors of the first missing output require large concatenation grammars for their traces. Their computations still have short semantic descriptions. |
 | [Testing one coefficient after a signed monomial substitution](monomial-weight-coefficients.md) | An application of real point location gives polynomial-depth comparison trees for an exact signed coefficient, including all ties. A uniform Boolean-to-arithmetic conversion is still missing. |
 | [Agreement at every rational exponential deadline](rational-clock-agreement.md) | Two machines can agree on the timely status of every name at every fixed rational rate eventually, while differing on all odd savings within the last polynomial factor of each deadline in (3,4). |
 | [Prescribing which exact savings have random increments](programmable-clock-spectrum.md) | Two machines can agree on every program’s output and on all sufficiently late integer-rate outer complexities while disagreeing at every odd saving. A separate construction realizes any uniformly bounded-gap Π⁰₂ pattern. |
@@ -278,6 +289,11 @@ lean ResidueHeaders.lean
 lean ContinuumSavingRates.lean
 lean RateCylinderLaws.lean
 lean SuccessiveDescriptions.lean
+lean OccupiedClockCells.lean
+lean GrammarCell.lean
+lean ListedFastReplacements.lean
+lean NearClockCoding.lean
+lean LowWeightPolynomial.lean
 lean CommonDistortion.lean
 lean PrefixPrediction.lean
 lean TailCapacity.lean
@@ -294,6 +310,8 @@ lean ParityFibers.lean
 python3 one_bit_production_experiment.py
 python3 rational_clock_experiment.py
 python3 adaptive_profile_experiment.py
+python3 near_clock_code_experiment.py
+python3 implicit_output_experiment.py
 python3 rate_list_game.py
 python3 word_completion_experiment.py
 python3 suffix_image_experiment.py
