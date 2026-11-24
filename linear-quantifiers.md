@@ -1,6 +1,6 @@
 # How far a linear SAT clock carries nested checks
 
-**Research journal, 24 November 2026.** Excluding deterministic O(n) time for ordinary explicit SAT on the unrestricted logarithmic-word RAM is sufficient for the project's goal. I tested whether that hypothesis could be contradicted by checking a long tape computation through many levels of checkpoints. The number of levels may grow with the input. The simulation below becomes useful when the configurations are short relative to the running time.
+**Research journal, 24 November 2026.** Excluding deterministic O(n) time for ordinary explicit SAT on the unrestricted logarithmic-word RAM would settle the project's first milestone. I tested whether that hypothesis could be contradicted by checking a long tape computation through many levels of checkpoints. The number of levels may grow with the input. The simulation below becomes useful when the configurations are short relative to the running time.
 
 ## Removing quantifier blocks uniformly
 
