@@ -8,6 +8,10 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+The usual random affine hash isolates any specified hard $m$-bit table with probability at most $2^{-m}$ per trial when at most $L$ tables have short programs and $L(L+1)\le 2^m-1$. This holds even with an oracle that returns the sole hard table when it exists. For general pairwise-independent buckets I derived the exact maximum probability at each marginal and number of hard tables. A fast randomized hardness test on a short initial list would give a different route. On some candidate, the random tapes certifying its correct answer must evade even a covering test that can fix a quarter of the log deadline in arbitrary positions. No such tester has been found. [Isolation bounds, extremizers and remaining test](dense-hard-table-sampling.md)
+
+A deterministic program can match the sampling probability, up to a constant in program length, when success follows from fixing sufficiently few random bits in each tape prefix. The decoder enumerates a family of almost-independent tapes whose prefixes use few seed bits at every deadline. Adding one parity check to any sampler preserves half the probability of every answer while forcing all narrow certificates to come from early runs. [Coding theorem, second-moment extension and parity obstruction](cube-tape-coding.md)
+
 The linear-SAT coding test now covers whole truth tables of length polynomial in the logarithm of the sampling deadline. A contradiction can come from a frequently sampled table for which every sufficiently short deterministic program misses the deadline even after any fixed polylogarithmic slowdown. I used polynomial evaluations to reduce this test to the earlier one for short integers. A private-coin program can already reproduce an explicitly printed output of any length at the required bit cost when the output is frequent. I have not found a table that separates the two kinds of programs. [Deterministic transfer and finite checks](recovering-longer-outputs.md) · [Private-coin coding for long words](private-coin-long-words.md)
 
 Under the same coding hypothesis, a total bounded-error language running in $T(n)=2^{2^n}$ has a deterministic simulator correct on every input for a set of lengths of positive upper density, in $T(n)2^{O(n+1)}$ time. A language defeating every such simulator would rule out linear SAT. The argument shares the cost of reproducing an input across several deadlines. [Conditional coding with a shared input](conditional-clock-coding.md)
@@ -88,6 +92,10 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Isolating a hard truth table](dense-hard-table-sampling.md) | Bounds the probability that any specified hard word is isolated with pairwise or three-wise independent tests. |
+| [Few fixed positions on a random tape](cube-tape-coding.md) | Gives unconditional deterministic codes from fractional or second-moment coverage, and relates narrow certificates after a parity gate to the original early output mass. |
+| [Extracting all bits of a unique witness](unique-witness-batches.md) | A linear SAT hypothesis permits batch recovery when a small correction to the linear forms on one RAM trace exists. An explicit parity RAM needs one correction per bit. |
+| [Algebraic covers in different variable orders](ordered-parity-refutations.md) | Tests succinct ordered refutations near the native missing-word clock and exhibits a cyclic-shift formula forcing large width under the stated order conditions. |
 | [Reconstructing sampled truth tables](recovering-longer-outputs.md) | Reduces deterministic coding of polylogarithmic-length outputs to the short-word test through polynomial list recovery. |
 | [Private-coin descriptions of long words](private-coin-long-words.md) | Empirical cumulative probabilities yield short private-coin programs even when the explicit output nearly fills the sampling clock. |
 | [Sharing the cost of a sampler’s input](conditional-clock-coding.md) | Derives a deterministic length-versus-time tradeoff under the inputless coding hypothesis and an advice-free simulation on a positive upper density of lengths. |
@@ -246,7 +254,7 @@ The individual notes distinguish literature precedents, elementary deductions, f
 
 ## Reproducing the checks
 
-Use Lean 4.19.0 with its bundled Std library and Python 3.11 or later. The finite permanent-grid and matching experiments use SymPy. Run from the repository root.
+Use Lean 4.19.0 with its bundled Std library and Python 3.11 or later. The finite permanent-grid and matching experiments use SymPy. The independent singleton optimization check uses NumPy and SciPy. Run from the repository root.
 
 ```sh
 lean TraceCheck.lean
@@ -331,6 +339,10 @@ lean NearClockCoding.lean
 lean SharedLevinClock.lean
 lean DiscountedMass.lean
 lean DilatedMass.lean
+lean SingletonIsolation.lean
+lean TapeCubeMass.lean
+lean UniqueWitnessBatches.lean
+lean OrderedParityCovers.lean
 lean MarginalGrowth.lean
 lean EvaluationRecovery.lean
 lean DefaultEscapes.lean
@@ -369,6 +381,8 @@ python3 adaptive_profile_experiment.py
 python3 near_clock_code_experiment.py
 python3 discounted_mass_experiment.py
 python3 dilated_mass_experiment.py
+python3 singleton_extremum_experiment.py
+python3 cube_tape_experiment.py
 python3 evaluation_recovery_experiment.py
 python3 moving_threshold_experiment.py
 python3 timestamp_allocation_experiment.py
