@@ -8,6 +8,8 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+The linear target has an exact test using the last output bit of one fixed program. Arrange those bits in a square of side $L=2^m$. If a linear SAT solver exists, at every sufficiently large phase its table is more than $L^2/16$ bits away from every binary matrix of rank at most $L/16$. If every linear-time candidate fails, the table is identically zero throughout intervals $j\le m<2^j$ for arbitrarily large $j$. The program checks which candidate agrees with brute-force SAT on growing sets of short formulas. Neither behavior has been proved unconditionally. On the candidate rigid table, clearing any one-entry already brings it within the allowed distance. This identifies exactly where an approximation argument can miss by one bit. [Fixed program and equivalence](fixed-program-parity.md) · [Window approximation and counterexample](substring-template-rigidity.md) · [Phase checks in Lean](TrialResetIntervals.lean)
+
 I found a way to use **parities of short programs** to test all three SAT time targets. Arrange the words of even length $q$ in a square with $L=2^{q/2}$ rows. Select short programs by a random polynomial on their names, and enter the parity of the selected names that produce each word. Under linear-time SAT, at most a $2^{-\Omega(q^2)}$ fraction of these matrices can be changed in a small constant fraction of their entries to give binary rank at most $\kappa L$. The test can ignore every word already produced by time $2^q$. Thus a low-rank construction for a fraction $2^{-o(q^2)}$ of the selections would suffice. I obtained low rank for every selection on a particular nonlinear program family; the full interpreter remains unresolved. The quadratic and cubic versions have smaller target ranks. Even a single power of the name index must give hard parity matrices for almost every scalar multiplier at some exponent in every sufficiently long run of consecutive powers. [Parity criterion and inverse calculation](parity-of-program-fibers.md) · [Finite-field experiments](fiber_selector_syndrome_experiment.py) · [Tuple count](FiberMomentTuples.lean) · [Sparse fiber moments](SparseFiberMoments.lean)
 
 I also tested covers of the actual outputs. A dense set avoiding almost all easy words must use a different suffix pattern on a positive fraction of prefixes, even if each prefix gets a projective semilinear change of coordinates and each pattern allows a fixed Hamming error. Sparse XOR lists can meet that diversity requirement and still contain many easy words. Other arguments restrict the shorter side of an XOR cover and the algebraic degree of rational images with arbitrary overlaps. [Suffix patterns and relabeling](suffix-patterns-and-relabeling.md) · [Projective marker experiment](projective_row_markers_experiment.py) · [XOR cover widths](escaping-xor-covers.md) · [Rational images](rational-image-covers.md) · [Finite sieve in Lean](RationalRangeSieve.lean)
@@ -106,6 +108,13 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [One program for all three SAT clocks](fixed-program-parity.md) | In each mode a fixed prefix selects a program whose last bit gives either eventually rigid tables under the SAT hypothesis or arbitrarily long intervals of zero tables if that hypothesis fails. |
+| [Checking a solver with its own verdicts](checking-a-solver-with-its-own-verdicts.md) | A positive answer to an explicit query certifies that the program is wrong. For every finite correctness horizon one wrong linear-time program passes all its own queries forever. |
+| [Rows drawn from a few common strings](substring-template-rigidity.md) | Extends a Toeplitz nonrigidity bound to repeated windows and proves restrictions on the lexicographically first rigid matrix. Some logarithmic-rank matrices defeat the window test in both orientations. |
+| [Paired names and adaptive raw-bit probes](paired-name-probes.md) | On a different universal encoding a query tree reading $t$ bits separates at most $t/B$ of the paired names. The constructor attains this fraction up to saturation. |
+| [Boolean polynomials on program names](boolean-name-projections.md) | Fixed-degree parities suffice for a quantitative conditional rigidity bound. Some nonlinear program families admit low-rank representations, and a bounded-fiber example attains the exponent in the dimension estimate. |
+| [Counts and spectral tests on actual output words](spectra-of-program-counts.md) | A fixed odd prime detects enough nonempty program fibers. A second test pairs positive-density subsets of words missed by the deadline and words first reached late with small spectral discrepancy under the SAT hypothesis. |
+| [Local queries to a path formula's unique witness](locally-decoding-path-witnesses.md) | Gives the exact success probability for a batch of linear observations with an input-specific description and adaptive linear probes. A width-one 2-CNF exhibits the cost of recovering a particular checkpoint. |
 | [Suffix tables under quadratic or cubic SAT](suffix-block-sat-exponents.md) | Gives conditional almost-everywhere circuit approximation bounds for the same language and the same program deadline as the linear test. |
 | [Two sparse lists of XOR summands](xor-sumset-advice.md) | Gives lower bounds on the number of distinct easy sums, an entropy obstruction for arbitrary independent marginal laws, and a cubic-SAT test with one pair of lists per prefix. |
 | [Covering the output image with short lists](covering-program-images.md) | A cover of controlled capacity would suffice. An injective field multiplication routine defeats separation into row and column functions while admitting a simple image cover. |
@@ -286,6 +295,16 @@ The individual notes distinguish literature precedents, elementary deductions, f
 Use Lean 4.19.0 with its bundled Std library and Python 3.11 or later. The finite permanent-grid and matching experiments use SymPy. The independent singleton optimization check uses NumPy and SciPy. Run from the repository root.
 
 ```sh
+lean LocalVerdictCheck.lean
+lean SolverTrialStability.lean
+lean TrialResetIntervals.lean
+lean LiteralBranchParity.lean
+lean PairedProbeBudget.lean
+lean BooleanPushforward.lean
+lean ModularFiberCounts.lean
+python3 paired_name_probes_experiment.py
+python3 path_replay_experiment.py
+python3 substring_template_experiment.py
 lean TraceCheck.lean
 lean FullCubeSelection.lean
 lean SuffixBlockExponents.lean
