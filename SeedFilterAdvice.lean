@@ -35,4 +35,33 @@ theorem certified_discrepancy {u v approxU approxV tolerance gap : Nat}
     (right : approxV ≤ v + tolerance) : u ≤ v + gap + 2 * tolerance := by
   omega
 
+/-- Raising feasible ranks coordinatewise cannot lower their checksum. -/
+private theorem checksum_mono (rows : List (Nat × Nat))
+    (raised : ∀ r ∈ rows, r.1 ≤ r.2) :
+    (rows.map Prod.fst).sum ≤ (rows.map Prod.snd).sum := by
+  induction rows with
+  | nil => exact Nat.le_refl _
+  | cons h tail ih =>
+    simp only [List.map_cons, List.sum_cons]
+    exact Nat.add_le_add (raised h (by simp)) (ih (fun r hr => raised r (by simp [hr])))
+
+/-- A trusted minimum checksum certifies all the individual offer minima,
+    including sentinel rows, using positive feasibility witnesses only. -/
+theorem checksum_recovers_minima (rows : List (Nat × Nat))
+    (raised : ∀ r ∈ rows, r.1 ≤ r.2)
+    (checksum : (rows.map Prod.fst).sum = (rows.map Prod.snd).sum) :
+    ∀ r ∈ rows, r.1 = r.2 := by
+  induction rows with
+  | nil => simp
+  | cons h tail ih =>
+    have head := raised h (by simp)
+    have rest : ∀ r ∈ tail, r.1 ≤ r.2 := fun r hr => raised r (by simp [hr])
+    have tailLe := checksum_mono tail rest
+    simp only [List.map_cons, List.sum_cons] at checksum
+    intro r hr
+    rcases List.mem_cons.mp hr with same | member
+    · subst r
+      omega
+    · exact ih rest (by omega) r member
+
 end SeedFilterAdvice
