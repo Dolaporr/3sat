@@ -8,6 +8,8 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+I constructed a single ordinary sampler whose completion times defeat every rule in a specified class that sees only the output word and its timestamp. Its words themselves still have short deterministic programs. A separate construction shows that every frequently sampled short word already has a private-coin prefix program of optimal length up to a constant. The remaining question on this route is whether a deterministic program can match its length and reproduce its output at a nearby deadline. [Timestamp construction and the failed inference](timestamp-allocation.md) · [Private-coin coding and the required deterministic replacement](private-coin-prefix-coding.md)
+
 A possible way to rule out linear SAT is to find a word that a fixed randomized sampler prints frequently by a deadline, even though every short deterministic program is too slow. For inverse-polylogarithmic probabilities and words no longer than the logarithm of the deadline, this test is equivalent to checking a single interpreter on binary integers, giving the integer itself as the starting time allowance. The equivalence is unconditional. A randomized search can detect even one qualifying violation in a block $[N,2N)$ in $N\,\mathrm{polylog}(N)$ time for each fixed inverse-polylogarithmic probability threshold and program budget of order $\log\log N$ bits. Finding violations that persist for every fixed clock exponent is still open. [Equivalence and probability transfer](sampling-at-a-numeric-length.md) · [Search guarantees and finite test](dilated-program-mass.md)
 
 There is now a test for linear SAT using only programs that print zeros. Give a program a cost of its length plus the logarithm of its running time. For each word of n zeros, compare the best cost with the total weight of all programs printing it, where each program’s ordinary probability is divided by its running time. Linear SAT would bound the difference between the best cost and the negative logarithm of that weight by O(log log n), for every n on each fixed efficient interpreter. An ordinary interpreter can attain this order, even with any prescribed fixed coefficient as the interpreter varies. The search needs an unbounded ratio on one fixed interpreter. I also proved the upper bound unconditionally outside a quantitatively small set of lengths and constructed very deep lengths where the test still passes. [Unary test and the unsuccessful diagonal](unary-speed-gap.md) · [Ordinary examples attaining the scale](native-coding-delays.md) · [All-output bound](discounted-program-mass.md)
@@ -82,6 +84,10 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Assigning numeric labels from completion times](timestamp-allocation.md) | Proves a sharp squared-logarithm loss for timestamp-only rules and realizes failures of bounded rules on one ordinary sampler. Its output words remain easy to print. |
+| [Short private-coin prefix programs](private-coin-prefix-coding.md) | Gives a randomized encoder and decoder at nearby deadlines for high-mass outputs. Deterministic replacement at that length remains open. |
+| [Races between partly observed workers](independent-clock-races.md) | Order-statistic circuits of bounded width allow constant-bit deterministic coding from independently certified worker intervals. |
+| [Local proofs of a real program’s output](forcing-pebble-layouts.md) | Gives a size and width criterion for proofs about predecessors of the first missing word. A pyramid circuit shows how even an easy true output can have large width in a chosen encoding. |
 | [Synchronizing publication times on a single numeric length](sampling-at-a-numeric-length.md) | Transfers a constant fraction of a short word’s sampling probability to an integer that encodes it. The high-probability deadline test is equivalent to a single-interpreter numeric test. |
 | [One deadline for the full discounted probability](dilated-program-mass.md) | Proves a sharp probability inequality and gives a thresholded search for exceptional lengths. Under linear SAT one program attains a constant fraction of the total mass after increasing its time allowance. |
 | [Pathwidth of a real computation](trace-pathwidth.md) | Local checks authenticate a guessed decomposition of a tape run. The width needed by the shortest timely descriptions near the first missing output remains unknown. |
@@ -315,6 +321,10 @@ lean SharedLevinClock.lean
 lean DiscountedMass.lean
 lean DilatedMass.lean
 lean MovingThreshold.lean
+lean TimestampAllocation.lean
+lean MidpointProgram.lean
+lean RankRace.lean
+lean ForcingLayouts.lean
 lean MemoryLayout.lean
 lean PrefixTreeWork.lean
 lean SingleValuedCheckpoints.lean
@@ -343,6 +353,8 @@ python3 near_clock_code_experiment.py
 python3 discounted_mass_experiment.py
 python3 dilated_mass_experiment.py
 python3 moving_threshold_experiment.py
+python3 timestamp_allocation_experiment.py
+python3 rank_race_experiment.py
 python3 trace_pathwidth_experiment.py
 python3 quadratic_fiber_experiment.py
 python3 relational_memory_experiment.py
