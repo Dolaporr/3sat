@@ -8,6 +8,10 @@ We use binary-encoded literal indices, a conventional explicit formula encoding,
 
 ## Current results
 
+The linear-SAT coding test now covers whole truth tables of length polynomial in the logarithm of the sampling deadline. A contradiction can come from a frequently sampled table for which every sufficiently short deterministic program misses the deadline even after any fixed polylogarithmic slowdown. I used polynomial evaluations to reduce this test to the earlier one for short integers. A private-coin program can already reproduce an explicitly printed output of any length at the required bit cost when the output is frequent. I have not found a table that separates the two kinds of programs. [Deterministic transfer and finite checks](recovering-longer-outputs.md) · [Private-coin coding for long words](private-coin-long-words.md)
+
+Under the same coding hypothesis, a total bounded-error language running in $T(n)=2^{2^n}$ has a deterministic simulator correct on every input for a set of lengths of positive upper density, in $T(n)2^{O(n+1)}$ time. A language defeating every such simulator would rule out linear SAT. The argument shares the cost of reproducing an input across several deadlines. [Conditional coding with a shared input](conditional-clock-coding.md)
+
 I constructed a single ordinary sampler whose completion times defeat every rule in a specified class that sees only the output word and its timestamp. Its words themselves still have short deterministic programs. A separate construction shows that every frequently sampled short word already has a private-coin prefix program of optimal length up to a constant. The remaining question on this route is whether a deterministic program can match its length and reproduce its output at a nearby deadline. [Timestamp construction and the failed inference](timestamp-allocation.md) · [Private-coin coding and the required deterministic replacement](private-coin-prefix-coding.md)
 
 A possible way to rule out linear SAT is to find a word that a fixed randomized sampler prints frequently by a deadline, even though every short deterministic program is too slow. For inverse-polylogarithmic probabilities and words no longer than the logarithm of the deadline, this test is equivalent to checking a single interpreter on binary integers, giving the integer itself as the starting time allowance. The equivalence is unconditional. A randomized search can detect even one qualifying violation in a block $[N,2N)$ in $N\,\mathrm{polylog}(N)$ time for each fixed inverse-polylogarithmic probability threshold and program budget of order $\log\log N$ bits. Finding violations that persist for every fixed clock exponent is still open. [Equivalence and probability transfer](sampling-at-a-numeric-length.md) · [Search guarantees and finite test](dilated-program-mass.md)
@@ -84,6 +88,13 @@ The first search found a family of width-three formulas with k independent input
 
 | Attempt | Result and outstanding step |
 | --- | --- |
+| [Reconstructing sampled truth tables](recovering-longer-outputs.md) | Reduces deterministic coding of polylogarithmic-length outputs to the short-word test through polynomial list recovery. |
+| [Private-coin descriptions of long words](private-coin-long-words.md) | Empirical cumulative probabilities yield short private-coin programs even when the explicit output nearly fills the sampling clock. |
+| [Sharing the cost of a sampler’s input](conditional-clock-coding.md) | Derives a deterministic length-versus-time tradeoff under the inputless coding hypothesis and an advice-free simulation on a positive upper density of lengths. |
+| [Choosing from cumulative truth tables](cumulative-table-lists.md) | One choice succeeds in every sufficiently wide block at a quantified cost. A recursive oracle separates that guarantee from eventual correctness even with indefinitely extensible lists. |
+| [Predicting an encoded bit on a common query stream](length-free-prediction.md) | Soft-decision list decoding turns a small prediction advantage for a sampled table into a short exact program, with recovery cost polynomial in table length. |
+| [Bounded deviations from predicted proof choices](default-escape-games.md) | Relates exponential-size default strategies on uniform games to unrestricted circuit hardness for a language in exponential time. |
+| [Shallow refutations after partial assignments](horn-gap-rounds.md) | Bounds Horn propagation depth by the reciprocal residual violation gap. A constant-gap family needs linear branching depth to expose q-Horn contradictions on every leaf. |
 | [Assigning numeric labels from completion times](timestamp-allocation.md) | Proves a sharp squared-logarithm loss for timestamp-only rules and realizes failures of bounded rules on one ordinary sampler. Its output words remain easy to print. |
 | [Short private-coin prefix programs](private-coin-prefix-coding.md) | Gives a randomized encoder and decoder at nearby deadlines for high-mass outputs. Deterministic replacement at that length remains open. |
 | [Races between partly observed workers](independent-clock-races.md) | Order-statistic circuits of bounded width allow constant-bit deterministic coding from independently certified worker intervals. |
@@ -320,6 +331,12 @@ lean NearClockCoding.lean
 lean SharedLevinClock.lean
 lean DiscountedMass.lean
 lean DilatedMass.lean
+lean MarginalGrowth.lean
+lean EvaluationRecovery.lean
+lean DefaultEscapes.lean
+lean HornGapRounds.lean
+lean LengthFreePrediction.lean
+lean SoftRecovery.lean
 lean MovingThreshold.lean
 lean TimestampAllocation.lean
 lean MidpointProgram.lean
@@ -352,6 +369,7 @@ python3 adaptive_profile_experiment.py
 python3 near_clock_code_experiment.py
 python3 discounted_mass_experiment.py
 python3 dilated_mass_experiment.py
+python3 evaluation_recovery_experiment.py
 python3 moving_threshold_experiment.py
 python3 timestamp_allocation_experiment.py
 python3 rank_race_experiment.py
