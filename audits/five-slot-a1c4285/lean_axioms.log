@@ -1,0 +1,33 @@
+== AdaptiveCrossedCommunication.lean
+'AdaptiveCrossedCommunication.two_links' does not depend on any axioms
+'AdaptiveCrossedCommunication.root_endpoint' depends on axioms: [propext, Quot.sound]
+'AdaptiveCrossedCommunication.short_group' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AdaptiveCrossedCommunication.transported_displacement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AdaptiveCrossedCommunication.long_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+== BoundedRamWitnesses.lean
+'BoundedRamWitnesses.finite_suite_iff' depends on axioms: [propext, Quot.sound]
+'BoundedRamWitnesses.no_eventual_clock_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BoundedRamWitnesses.address_charge' depends on axioms: [propext, Quot.sound]
+'BoundedRamWitnesses.extend_required_words' depends on axioms: [propext, Quot.sound]
+exit=0
+== CrossedScanAncestry.lean
+'CrossedScanAncestry.two_links' does not depend on any axioms
+'CrossedScanAncestry.root_endpoint' depends on axioms: [propext, Quot.sound]
+'CrossedScanAncestry.two_link_cost' depends on axioms: [propext, Quot.sound]
+'CrossedScanAncestry.paired_span' depends on axioms: [propext, Quot.sound]
+'CrossedScanAncestry.ceil_links_le_passes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'CrossedScanAncestry.destination_bound' depends on axioms: [propext, Quot.sound]
+exit=0
+== ResetEpisodePacking.lean
+'_private.ax_ResetEpisodePacking.0.ResetEpisodePacking.capacity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.ax_ResetEpisodePacking.0.ResetEpisodePacking.poolLength' depends on axioms: [propext]
+'_private.ax_ResetEpisodePacking.0.ResetEpisodePacking.inPool' depends on axioms: [propext, Quot.sound]
+'ResetEpisodePacking.resetPacking' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+== SparseDecimalNames.lean
+'SparseDecimalNames.window_capacity' depends on axioms: [propext, Quot.sound]
+'SparseDecimalNames.explicit_slack' does not depend on any axioms
+exit=0
