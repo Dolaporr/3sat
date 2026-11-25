@@ -6,6 +6,12 @@ The first target is to rule out a uniform deterministic **O(n)** worst-case algo
 
 We use binary-encoded literal indices, a conventional explicit formula encoding, words of Θ(log n) bits with a constant sufficient for the polynomial address range in use, and a fixed instruction set with ordinary word arithmetic, Boolean operations, and indirect reads and writes. Word operations have polylogarithmic-size Boolean implementations. Exact timing statements about promise families identify their encoding. A hard family of explicit width-three instances in this encoding would suffice for the general SAT target. Each target excludes the stated big-O bound. A matching big-Omega bound alone is compatible with it.
 
+## Testing the minimum-spanning-tree proof on SAT
+
+The DLMST preprint controls histories using maxima of fixed sets under a common order. Two RAM writers already admit exponentially many read histories at the same writer histogram when input bits choose the addresses. Even a two-element list of possible histories for the actual priority computation can require native time to certify one sampled reply. [Paper audit and memory examples](dlmst-history-transfer.md) · [Recovering maxima from counts](few-writer-maxima.md)
+
+For explicit 3-CNF the cost of preserving all clause prefixes depends sharply on the pins a query may set. With $v$ variables and up to $p=1,2,3$ pins, a stand-alone summary needs $\Theta(v^p\log v)$ bits in the worst case at polynomial stream lengths, even allowing fixed error below one half per query. A concrete clause permutation proves the lower bound and also shows how rereading the formula changes it. [Proof and probe tradeoff](prefix-certificates-for-cnf.md)
+
 ## Certifying one false answer and forecasting rare verdicts
 
 A fixed program produces an explicit family whose SAT verdicts have the form $a_j\cdot x$ at scale $j$. A short, sound certificate ruling out **any one** candidate for $a_j$ on infinitely many stages would exclude the corresponding unrestricted linear, quadratic or cubic SAT clock. Knowing one nonzero exclusion already improves the worst-case probability of naming two formulas with equal verdicts. The exact forecasting game distinguishes one exclusion from a spanning set. [Construction and bounds](collision-forecasts-for-sat.md)
@@ -15,6 +21,10 @@ In a separate sparse RAM computation the count of ones through $J$ is $o(\log\lo
 ## A Boolean-circuit consequence of the matrix multiplication preprint
 
 Its theorem on testing list distinctness implies $\Omega(n(\log n)^\sigma)$ bounded-fan-in Boolean gates for SAT at infinitely many encoded lengths, for some $\sigma>0$. A direct reduction uses ordinary 3-CNF with dense binary variable identifiers. Separate reductions give the bound for dense binary XOR equations and for sparse-name unit clauses in which each variable occurs at most once per sign. These unit instances take $O(n/\log n)$ time on the word RAM. The preprint's upper bound also increases the block sizes available in two tests of the unrestricted quadratic and cubic hypotheses. [Reductions and RAM accounting](matrix-list-unit-sat.md) · [Dense parity graphs](matrix-list-parity-graphs.md)
+
+The list volume bound also forces simultaneous divisibility of witness counts near every distinct input list for small verifiers, in each fixed prime characteristic. Separately, a transcript counting argument bounds how few edits can escape a transcript of adaptive fingerprints, including timestamp-specific XOR tests. [Witness counts](matrix-witness-divisibility.md) · [Adaptive checks](local-edits-against-fingerprints.md)
+
+For the priority computation a specified scalar evaluation over the 16-element field distinguishes one true exceptional table from two in the original variables. The cost of computing this canonical extension remains open. For sparse answer windows, a short sound list of possible answers at infinitely many scales would already separate the requested clocks; even a probabilistic predictor of the entire window can converge at a rate whose modulus computes the halting problem. [Finite-field readout](support-filtered-parity.md) · [Certified lists and stochastic predictions](sparse-window-list-certificates.md)
 
 ## Certificates about the actual priority computation
 
