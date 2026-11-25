@@ -1,5 +1,6 @@
 """Check exact prefix witnesses, streaming bases, and inverse-permutation queries."""
-from itertools import combinations, permutations
+from collections import Counter, defaultdict
+from itertools import combinations, permutations, product
 from math import comb, factorial
 from random import Random
 
@@ -80,9 +81,102 @@ def permutations_recovered(n, k):
     return len(signatures)
 
 
+def exact_checksum_certificates():
+    """Minimize reveal sets using every completion at small order."""
+    rng = Random(18)
+    checked = 0
+    for n in range(2, 6):
+        orders = list(permutations(range(n)))
+        labels = (product(range(3), repeat=n) if n <= 4 else
+                  [tuple(rng.randrange(3) for _ in range(n)) for _ in range(24)])
+        for g in labels:
+            largest_class = max(Counter(g).values())
+            for threshold in range(n + 1):
+                sums = [sum(g[i] for i in row[:threshold]) % 3 for row in orders]
+                costs = [n] * len(orders)
+                for mask in range(1 << n):
+                    positions = [i for i in range(n) if mask >> i & 1]
+                    views = [tuple(row[i] for i in positions) for row in orders]
+                    possible = defaultdict(set)
+                    for view, value in zip(views, sums):
+                        possible[view].add(value)
+                    for j, view in enumerate(views):
+                        if len(possible[view]) == 1:
+                            costs[j] = min(costs[j], len(positions))
+                expected = min(threshold, n-threshold, n-largest_class)
+                assert costs == [expected] * len(orders)
+                checked += len(orders)
+    return checked
+
+
+def noisy_checksum_transcripts():
+    """Exact hypergeometric bias conditioned on every feasible binary margin."""
+    count = 0
+    for m in (4, 8, 16, 32, 64):
+        for q in range(m // 2):
+            d = m // 2 - q
+            pairs = d // 4
+            for prefix_openings in range(q + 1):
+                k = m // 2 - prefix_openings
+                for ones_revealed in range(q + 1):
+                    ones = m // 2 - ones_revealed
+                    zeros = m - q - ones
+                    signed = sum((-1)**i * comb(ones, i) * comb(zeros, k-i)
+                                 for i in range(max(0, k-zeros), min(ones, k)+1))
+                    total = comb(ones+zeros, k)
+                    # Compare |bias| to (1-d/(2m))^pairs as an integer inequality.
+                    assert abs(signed) * (2*m)**pairs <= total * (2*m-d)**pairs
+                    n = ones + zeros
+                    ell = min(k, n-k)
+                    imbalance = abs(ones-zeros)
+                    # Match keys of opposite colors. A designated smaller-side
+                    # slot is unmatched or its partner must stay on that side.
+                    not_split = imbalance*(n-1) + (n-imbalance)*(ell-1)
+                    assert abs(signed)*n*(n-1) <= total*not_split
+                    # Instead expose slot pairs on opposite sides.
+                    rare_color = min(ones, zeros)
+                    crossing_pairs = min(ell, rare_color // 4)
+                    assert abs(signed)*(2*n)**crossing_pairs <= total*(2*n-rare_color)**crossing_pairs
+                    count += 1
+    return count
+
+
+def last_row_advantage():
+    checked = 0
+    for m in (4, 8, 16):
+        q = m // 2 - 1
+        n = m - q
+        for unobserved in combinations(range(m), n):
+            walsh = [sum(1 - 2*((a & x).bit_count() & 1) for x in unobserved)
+                     for a in range(1, m)]
+            assert sum(w*w for w in walsh) == n*q
+            assert max(w*w for w in walsh)*(m-1) >= n*q
+            checked += 1
+    return checked
+
+
+def krawtchouk_bias_bound(limit):
+    checked = 0
+    for n in range(2, limit + 1):
+        for a in range(n//2 + 1):
+            imbalance = n - 2*a
+            if imbalance == 0:
+                continue
+            for k in range(1, n):
+                signed = sum((-1)**i * comb(a, i) * comb(n-a, k-i)
+                             for i in range(max(0, k-(n-a)), min(a, k)+1))
+                assert abs(signed)*n <= imbalance*comb(n, k)
+                checked += 1
+    return checked
+
+
 if __name__ == "__main__":
     rng = Random(883)
     sizes = [(n, k) for n in range(1, 8) for k in range(1, n + 1)]
     print(f"{sum(proposed_chain(n, k) for n, k in sizes)} private prefix witnesses")
     print(f"{sum(basis_test(n, k, rng) for n, k in sizes)} simultaneous prefix bases checked by update")
     print(f"{sum(permutations_recovered(n,k) for n,k in [(4,2),(4,3),(5,4)])} permutations recovered via pinned SAT")
+    print(f"{exact_checksum_certificates()} individual checksum certificate optima")
+    print(f"{noisy_checksum_transcripts()} conditional hypergeometric checksum bias bounds")
+    print(f"{last_row_advantage()} one-remaining-row Walsh advantages")
+    print(f"{krawtchouk_bias_bound(104)} nonzero-imbalance Krawtchouk bounds through N=104")

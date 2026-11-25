@@ -44,4 +44,74 @@ The right hand side is $(1-h_2(\delta))M\log_2 M-O(M)$. Giving true more signifi
 
 In the affine case the same upper-bound argument gives a positive transfer. For a stream of XOR equations, keep independent augmented coefficient rows $[a\mid b]$ over $\mathbb F_2$. At most $v+1$ original equations preserve the entire solution set at every threshold, including inconsistent prefixes. Encoding the retained positions and rows incurs its own bit costs. Ordinary width-three clauses have the cubic obstruction above. These two cases identify the role of the mathematical structure that a putative fast verifier of SAT histories would have to exploit.
 
+## Changing the query to a checksum
+
+A short certificate for each individual pin does not imply a short certificate for a checksum of its answers. Work on the permutation family above, with $m$ distinct all-negative triple keys and threshold $t$. Each row probe reveals one entire key; all other computation is free. There is no input-dependent index. The verifier and prover can see the public universe, $t$, and a labeling $g$ of the keys in an abelian group. Define the checksum of the *unsatisfiability* indicators by
+$$
+                       A_g(\pi,t)=\sum_{i=1}^t g(\pi_i).
+$$
+The UNSAT indicator for key $x$ is exactly the test that $x$ appears in this prefix. Thus $A_g$ can be expressed entirely in terms of the answers to the pinned SAT queries. One can equivalently use SAT indicators and subtract from the public total.
+
+Write $c_g=\max_a|\{x:g(x)=a\}|$. **On every permutation, the least number of row probes in a certificate that forces the correct checksum is**
+$$
+                        \min\{t,m-t,m-c_g\}.
+$$
+Here a certificate can choose inspected positions with full knowledge of the input. It must give the same claimed value on every permutation consistent with the revealed rows. This also lower-bounds every accepting branch of any sound verifier in this access model. To attain it, read the entire prefix, read the entire suffix and subtract from the public total, or use the witness to locate all $m-c_g$ keys outside a public largest color class. In the last option the verifier checks the positions and the identities of all exceptional keys; every other prefix row has the common label. The bound includes the cases of a constant label and an empty side.
+
+For the converse, if at least one slot on each side remains unread and the unread keys have two different labels, arrange two such keys on opposite sides and transpose them. This gives two completions with identical revealed rows and distinct checksums by cancellation in the group. Thus a certificate must exhaust a side or leave only one label among all unread keys. The latter requires at least $m-c_g$ probes. For a *deterministic decision algorithm* with any fixed nonconstant label the exact worst-case cost is $\min\{t,m-t\}$. An adversary reserves two keys with different labels while answering fewer than this many probes. It has enough other keys to answer each query distinctly, and an opposing pair of unread slots remains. Scanning the shorter side attains the bound. In particular a single membership query admits a one-row certificate on either answer at an interior threshold, even when computing the answer deterministically can require half the stream.
+
+For any $h\ge1$ take a public set of $m=2^h$ distinct triples from a sufficiently large variable universe, and label them bijectively with $x\in\mathbb F_2^h$. Every mask $a\ne0$ specifies a binary label $g_a(x)=a\cdot x$ with two equally large classes. Consequently certifying **any nonzero linear measurement of the prefix XOR** costs $\min(t,m-t)$ rows on every input. The prover may choose the mask after seeing the permutation. Once it reports a mask, the same transcript must force its bit on every consistent completion. At the middle threshold the exact cost is $m/2$. This concerns the $h$-dimensional family of Hadamard masks; individual coordinate tests of the length-$m$ membership table have the one-row certificates above.
+
+There is also a bound for noisy prediction with a freely selected mask. At the middle threshold let the permutation be uniform. A randomized algorithm may read $q=m/2-d$ rows adaptively, $d\ge1$, then give a nonzero mask of its choice and predict its bit. Its success is at most
+$$
+ \tfrac12+\tfrac12\left(1-\frac{d}{2m}\right)^{\lfloor d/4\rfloor}.
+$$
+Fix the coins and the transcript. The remaining permutation is uniform. For the reported mask there are at least $d$ keys of each color and at least $d$ open slots on each side. Pick $r=\lfloor d/4\rfloor$ disjoint pairs of open positions across the threshold. During their successive exposure at least $d/2$ keys of each color remain. If $N$ keys remain with color counts $n_0,n_1$, the next pair is mixed with probability $2n_0n_1/(N(N-1))\ge d/(2m)$, using $\max(n_0,n_1)\ge N/2$. Conditional on the unordered contents of the pairs and the other slots, any mixed pair has an independent fair orientation. Swapping it toggles the reported checksum. The best predictor's advantage is therefore at most half the chance that all $r$ pairs are monochromatic. For $d/\sqrt m\to\infty$ the advantage vanishes, even though the mask is selected using the observations.
+
+**Saving even the last row.** For a uniform permutation, every such algorithm using at most $m/2-1$ probes has success probability
+$$
+                \tfrac12+O\!\left(\sqrt{\frac{\log m}{m}}\right).
+$$
+Thus for all sufficiently large powers of two, any fixed positive advantage on every permutation requires the entire worst-case deterministic probe budget $m/2$, even if the algorithm chooses its mask. This statement counts the maximum number of probes. Extra probes can pad an algorithm to any fixed budget $q\le m/2-1$, ignoring the extra replies. Repeats can be simulated from stored replies. With the coins fixed, adaptively selecting a fresh position gives a uniformly random unused key at each step. Hence the $q$ revealed keys have the same joint law as ordered sampling without replacement. On conditioning on the entire transcript, the remaining keys still fill the remaining slots uniformly.
+
+For a fixed nonzero mask let $S$ be the sum of its $+1,-1$ signs on the $q$ revealed keys. For $u\ge0$ the chance that $j$ designated draws all have sign $+1$ is at most $2^{-j}$, since the population is balanced. Expanding $\prod_i(1+(e^{2u}-1){\bf1}_{\{+\}}(i))$ and multiplying by $e^{-qu}$ gives
+$$
+ \mathbb E[e^{uS}]\le (\cosh u)^q\le e^{qu^2/2}.
+$$
+The same bound applies to $-S$. The exponential Markov bound with $u=D/q$ gives $\Pr(|S|>D)\le 2e^{-D^2/(2q)}$ for $q>0$; for $q=0$ the imbalance is zero. Since the total sign sum in the universe is zero, the remaining keys have the same absolute imbalance. Put $D=\sqrt{6m\log(2m)}$, with natural logarithms. A union bound over the $m-1$ masks shows that except with probability $O(m^{-5})$ all of them have remaining imbalance at most $D$ simultaneously. In particular this holds for a nonzero mask selected *after* the transcript.
+
+Fix a transcript in this event, its reported mask, and the remaining number of keys $n=m-q\ge m/2$. Each side still has an unfilled slot. Let $\ell\ge1$ be the smaller number of unfilled slots on the two sides. The unknown parity can be taken on either side, since the sum over all remaining keys is known. There are two bounds on its absolute conditional bias, by which we mean the magnitude of the expected $+1,-1$ sign.
+
+* For small $\ell$, pair keys of opposite colors until only keys of one color remain. At most $D$ keys are unpaired. Conditional on the unordered slots of every pair and on all unpaired placements, the orientations of the pairs are independent fair coins. If any pair lies across the threshold, flipping its orientation toggles the parity, giving conditional bias zero. For a fixed slot on the smaller side, probability at most $D/n$ puts an unpaired key there. Given that the key is paired, its mate occupies a uniformly random other slot. If no pair is split then this mate must land on the smaller side as well. The absolute bias is therefore at most $D/n+(\ell-1)/(n-1)$.
+* When $\ell>\lceil16\log m\rceil$, expose $\lceil16\log m\rceil$ disjoint *position* pairs across the threshold. For all sufficiently large $m$ both color classes start with at least $n/3$ keys, and at least $n/4$ of each color remain during all these exposures. Given all placements so far, a new pair has distinct colors with probability at least $1/4$: its larger remaining color class has size at least half the remaining population. Conditional on the unordered keys assigned to these pairs and the other placements, a mixed pair again has fair orientation. The absolute bias is at most $(3/4)^{\lceil16\log m\rceil}\le m^{-4}$.
+
+Taking the small-side bound for $\ell\le\lceil16\log m\rceil$, adding the failure probability for concentration and averaging over transcripts and coins gives the assertion. The two orientation arguments use different pairings: opposite-color *keys* in the first, opposite-side *positions* in the second.
+
+The scale of the advantage can be seen in the reverse direction. Probe $q=m/2-1$ prefix rows. With $n=m-q$ keys unobserved, only one prefix row remains hidden and its key is uniform on the unobserved set $U$. For each mask $a$ put $W(a)=\sum_{x\in U}(-1)^{a\cdot x}$. Orthogonality of characters gives $\sum_{a\ne0}W(a)^2=mn-n^2=nq$. Thus a maximizing nonzero mask has bias at least $\sqrt{q/(n(m-1))}$ on the hidden row. Use its majority and the known prefix parity to predict. This gives a pointwise conditional advantage of order at least $m^{-1/2}$ for every possible observed set when one row is saved.
+
+In fact the finite optimum has a closed expression. For $m=2^h\ge4$ and at most $m/2-1$ row probes it is
+$$
+        \max\bigl(\Pr[\mathrm{correct}]-\tfrac12\bigr)
+                      =\frac{\mathbb E D_U}{2n},
+ \qquad n=m/2+1,\quad D_U=\max_{a\ne0}|W(a)|,
+$$
+with $U$ a uniform $n$-subset. The prefix-row strategy attains the right-hand side exactly. For the upper bound pad every strategy to $m/2-1$ probes. Conditional on any transcript, $n$ is odd and each mask has nonzero remaining imbalance. If $k$ prefix slots are still unfilled then $1\le k\le n-1$. Their labels are a uniform size-$k$ sample from the remaining population. The binary Krawtchouk inequality below bounds its absolute parity bias by $|W(a)|/n$ for the reported mask. Taking the maximum and then averaging over the uniform $U$ proves the equality. For $m=2$ the budget is zero, the sole nonzero mask is balanced on the two possible keys of the one-slot prefix, and the advantage is zero.
+
+For completeness, in a population of $N$ signs with nonzero absolute imbalance $d$ the expected product of $1\le k\le N-1$ signs drawn without replacement has absolute value at most $d/N$. This is the normalized binary Krawtchouk inequality of Dumer and Kapralova, reproved in Theorem 1.2(i) by Brouwer, Cioabă, Ihringer and McGinnis. With $j$ negative keys, the parity bias is $K_j(k)/\binom Nj$ by symmetry of the size of the intersection of random $j$- and $k$-sets; $K_j(1)/\binom Nj=(N-2j)/N$. [Binary Krawtchouk inequality, Theorem 1.2](https://arxiv.org/pdf/1709.09011#page=3)
+
+Here is an elementary proof in sampling language. Negating all signs lets us assume that positive signs are in the majority. The case $N=1$ has no admissible $k$; $k=1$ and the case of identical signs give equality. If $d\ge2$ and $k\ge2$, condition on the first sign and induct on the population size. The two remaining imbalances are $d-1$ and $d+1$, both positive, and $1\le k-1\le N-2$. Taking absolute values and averaging the two induction bounds gives
+$$
+              \frac{(N+d)(d-1)+(N-d)(d+1)}{2N(N-1)}
+                  =\frac dN .
+$$
+For $d=1$ write $N=2a+1$ with $a\ge1$. The sum of the products over all $k$-subsets is the coefficient of $z^k$ in $(1+z)(1-z^2)^a$. Taking the complement preserves the absolute product bias, since the product of all signs is fixed. As $N$ is odd, one may therefore take $k=2i+1$ with $0\le i\le a-1$. The absolute bias is $\binom ai/\binom{2a+1}{2i+1}\le1/(2a+1)$. To check the inequality, partition $2a$ items into $a$ pairs and count $2i$-subsets with either zero or two split pairs. There are $\binom ai$ of the first type. For $i\ge1$, the second count is $4\binom{a}{i-1}\binom{a-i+1}{2}=2i(a-i)\binom ai$; for $i=0$ it is zero. Consequently $\binom{2a}{2i}\ge(1+2i(a-i))\binom ai\ge(2i+1)\binom ai$, as required.
+
+The exact leading term for the optimal advantage on the uniform distribution is
+$$
+              (1+o(1))\sqrt{\frac{\log m}{2m}}.
+$$
+For independent fair signs on all $m$ keys, the expected largest absolute signed Walsh coefficient is $(1+o(1))\sqrt{2m\log m}$ by Schmidt's Theorem 1, equation (4), at first order: the largest coefficient is $m$ minus twice the distance to affine functions. Removing the zero mask costs at most $\sqrt m$ in expectation by its second moment. Couple the positive-sign set of size $K$ to a uniform $n$-set by adding or deleting $|K-n|$ uniformly chosen keys, which gives the required uniform law by symmetry. The maximum changes by at most $2|K-n|$ and $\mathbb E|K-n|\le1+\sqrt m/2$ by the binomial variance. The signed coefficient of the adjusted set at each nonzero mask is $2W(a)$. Hence $\mathbb E D_U\sim\sqrt{2m\log m}/2$, giving the displayed leading term. Only row probes are charged in this comparison. [Schmidt, *Nonlinearity measures of random Boolean functions*, Theorem 1](https://arxiv.org/pdf/1308.3112#page=2)
+
+These statements use explicit permutations of clauses and charge probes to that representation. The genuine priority-circuit checksums use a succinctly generated circuit with additional gate structure. The permutation theorem does not prove a time lower bound for a single unrestricted SAT decision or for those genuine checksums. [Calibrated native circuit evaluations](modular-noisy-gate-evaluation.md)
+
 [Lean checks of the witnesses and recovery of threshold positions](PrefixClauseCertificates.lean) · [Finite exhaustive audit](prefix_clause_certificates_audit.py)
