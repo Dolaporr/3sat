@@ -1,12 +1,20 @@
 # Steering the SAT lower-bound project
 
-**24 November 2026.** An unconditional exclusion of deterministic linear time for ordinary explicit SAT on a logarithmic-word RAM with unrestricted workspace is the first milestone. The full objective requires a quadratic- or cubic-time exclusion. The project has no proof of any of those exclusions.
+**25 November 2026.** An unconditional exclusion of deterministic linear time for ordinary explicit SAT on a logarithmic-word RAM with unrestricted workspace is the first milestone. The full objective requires a quadratic- or cubic-time exclusion. The project has no proof of any of those exclusions.
 
 ## Current working milestone
 
 Use the native unary-clock language to target $\mathrm{NTIME}_{\rm RAM}[n]\ne\mathrm{DTIME}_{\rm RAM}[n]$. Its bounded-acceptance verifier takes linear time on the stated word RAM. On this complete problem the memory lower bound reaches $\Omega(n)$ bits in occupied nonzero words on inputs of each verdict at every sufficiently large length. The unrestricted allowance is $O(n\log n)$ bits. The explicit SAT objectives above retain the encoded formula length as their parameter. [Native theorem and proof](native-unary-clock-band.md)
 
 The existing snapshot transfer excludes the strict exponent region $e+d<1$ at linear solver time. Storing or replaying a state attains its frontier on the inverse-permutation family. Freeze that tradeoff as a search direction unless a new argument uses a property of SAT missing from that family. The next diagonal test charges the choice bits actually carried across alternation switches. It suffices to speed up the diagonal correctly on arbitrarily long extensions of each fixed opponent-program prefix. For linear SAT the encoded lengths of the nested calls impose additional logarithmic factors. A recursive Boolean oracle, even with its canonical multilinear extension available to the source machine, makes native alternating linear time deterministic in the specified oracle model. A proof transferring to that model cannot give the separation. [Reviewed master theorem](computation-history-theorem.md) · [Exponent frontier](inverse-snapshot-frontier.md) · [Speedup criterion](alternating-native-speedup.md) · [Mixed-oracle construction](multilinear-oracle-clock.md)
+
+## A private-coin test for the unrestricted clock
+
+The first target for a specific protocol on the pinned $M$-step program is a family of pruned accepting trees whose exact private-coin mass exceeds soundness. To attack the quadratic or cubic clock, the explored verifier work must be $o(M^{1/k}/\log^3 M)$ on infinitely many true scales. Shared private prefixes can be simulated once, while equal public histories across branches must receive identical prover messages. A clocked nondeterministic checker then yields one ordinary SAT instance per tested cap. No protocol with the required trees is known. [Proof and exact threshold arithmetic](few-coin-sat-transfer.md)
+
+A different test allows many random seeds but a fixed number of messages. Approximate counting of compatible private tapes converts a two-sided statistical gap into an exact alternating computation at the verifier's packed word cost. The eventual SAT slowdown must also pay for earlier choices passed as public bits. An arbitrary binary opcode already preserves a hypothetical ordinary speedup on long packed inputs. A sparse opcode preserves one on short inputs while still defeating statistical verification of a public circuit accurate everywhere except possibly one pair. [Packed alternating simulation](statistical-proof-alternation-cost.md) · [Conditional lifting and statistical obstruction](binary-opcode-speedups.md)
+
+The pinned family now gives a test involving only actual writable-memory replies under a fast-SAT hypothesis. A speculative replay checks every reply by rerunning the controller from the start and keeping its most recent write to that one address. A small predictor of these replies on either pin at infinitely many polynomial-clock runs would contradict an $n^{1+o(1)}$ SAT algorithm if its advice, state and number of exceptions all have a fixed power saving. No such predictor for the pinned computation is established. [Pinned read-reply proof](priority-pinned-load-replies.md)
 
 ## Testing the quadratic and cubic routes against fast computations
 
