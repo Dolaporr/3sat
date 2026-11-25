@@ -84,7 +84,20 @@ def check_sorted_pairs():
     return checked
 
 
+def check_readout_classification():
+    passing = []
+    for a, b, c, d in product(range(2), repeat=4):
+        table = (a, b, c, d)
+        edge = set(table)
+        path = {(table[2 * x + y], table[2 * y + z])
+                for x, y, z in product(range(2), repeat=3)}
+        if a == d and len(edge) % 2 == 0 and len(path) % 2 == 0:
+            passing.append(table)
+    assert passing == [(0, 1, 1, 0), (1, 0, 0, 1)]
+
+
 if __name__ == "__main__":
+    check_readout_classification()
     tagged = check_tagged_images()
     distinct = check_sorted_pairs()
     print(f"Verified {tagged} tagged parity images and {distinct} sorted-list coefficients.")

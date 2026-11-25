@@ -42,4 +42,23 @@ theorem parity_of_image_card (r : Nat) : 2^r % 2 = 1 ↔ r = 0 := by
   | zero => decide
   | succ r => simp [Nat.pow_succ]
 
+private def table (a b c d : Bool) : Bool → Bool → Bool
+  | false, false => a
+  | false, true => b
+  | true, false => c
+  | true, true => d
+
+private def pathImage (f : Bool → Bool → Bool) : List (Bool × Bool) :=
+  let bits := [false, true]
+  (bits.flatMap fun x => bits.flatMap fun y =>
+    bits.map fun z => (f x y, f y z)).eraseDups
+
+/-- The loop, the single nonloop and the two-edge directed path already
+force both off-diagonal truth-table entries to differ from the diagonal. -/
+theorem unique_one_bit_readouts (a b c d : Bool) :
+    (a = d ∧ [a, b, c, d].eraseDups.length % 2 = 0 ∧
+        (pathImage (table a b c d)).length % 2 = 0) ↔
+      (a = d ∧ b = !a ∧ c = !a) := by
+  cases a <;> cases b <;> cases c <;> cases d <;> decide
+
 end TaggedParityImages
