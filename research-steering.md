@@ -2,7 +2,13 @@
 
 **25 November 2026.** An unconditional exclusion of deterministic linear time for ordinary explicit SAT on a logarithmic-word RAM with unrestricted workspace is the first milestone. The full objective requires a quadratic- or cubic-time exclusion. The project has no proof of any of those exclusions.
 
+The November 24 matrix multiplication preprint gives two routes to an actual SAT circuit lower bound, through direct duplicate detection and a signed list test on unit clauses. Word RAMs already solve the hard unit-clause promise in sublinear time in its encoded bit length. For the unrestricted problem, the $9/4$ upper bound instead enlarges the candidate rigid blocks and permits checking a global parity-of-triangles chart if one can construct it for a genuine priority sign. [Derivations and missing step](matrix-list-unit-sat.md)
+
 The single-prover question now has an exact test. Under linear SAT, the union of all local binary consequences must be satisfiable on every sufficiently late false signed instance. The local three-answer compilation exhibits a specific global table passing all binary consequences on every scale. A different verifier producing binary inconsistency infinitely often would exclude linear SAT. [Formal statement and proof](binary-hulls-of-winner-proofs.md)
+
+A new target for all three SAT clocks is a bounded nondeterministic certificate of **absence** of a fixed scattered pattern in the genuine sparse award sequence. Deterministic certification requires $\Omega(2^J)$ on every sufficiently late success, even for certifying a fixed upper bound on the rare count in a logarithmic window. Presence admits timely signals on many actual windows. The storage test for the original signed bit now allows proof trees of size $2^{\gamma j^2/\log j}$ with a large dictionary of reusable lines under linear SAT. [Sparse pattern certificate](sparse-award-syndromes.md) · [Long proofs with limited storage](signed-proof-time-and-storage.md)
+
+The need for many full PCP tests survives checking the actual computation in a polynomial coefficient. Each small chosen set of tests can be extended from an honest codeword in the true winner's coset. The resulting constant-gap verifier can have only binary clauses and disjoint ternary parities, while every inconsistent subset needs more than the native clock in each kind of constraint. [Construction and formal scope](nonlinear-seeds-and-code-completions.md) · [When low-weight repairs do give short parity refutations](parity-repairs-of-winner-proofs.md) · [Interaction at two occurrences](two-occurrence-parity-clauses.md) · [Succinct selection and matching](matching-tests-for-priority-proofs.md)
 
 ## Current working milestone
 
