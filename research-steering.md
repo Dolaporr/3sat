@@ -2,11 +2,17 @@
 
 **25 November 2026.** An unconditional exclusion of deterministic linear time for ordinary explicit SAT on a logarithmic-word RAM with unrestricted workspace is the first milestone. The full objective requires a quadratic- or cubic-time exclusion. The project has no proof of any of those exclusions.
 
+The single-prover question now has an exact test. Under linear SAT, the union of all local binary consequences must be satisfiable on every sufficiently late false signed instance. The local three-answer compilation exhibits a specific global table passing all binary consequences on every scale. A different verifier producing binary inconsistency infinitely often would exclude linear SAT. [Formal statement and proof](binary-hulls-of-winner-proofs.md)
+
 ## Current working milestone
 
 Use the native unary-clock language to target $\mathrm{NTIME}_{\rm RAM}[n]\ne\mathrm{DTIME}_{\rm RAM}[n]$. Its bounded-acceptance verifier takes linear time on the stated word RAM. On this complete problem the memory lower bound reaches $\Omega(n)$ bits in occupied nonzero words on inputs of each verdict at every sufficiently large length. The unrestricted allowance is $O(n\log n)$ bits. The explicit SAT objectives above retain the encoded formula length as their parameter. [Native theorem and proof](native-unary-clock-band.md)
 
 The existing snapshot transfer excludes the strict exponent region $e+d<1$ at linear solver time. Storing or replaying a state attains its frontier on the inverse-permutation family. Freeze that tradeoff as a search direction unless a new argument uses a property of SAT missing from that family. The next diagonal test charges the choice bits actually carried across alternation switches. It suffices to speed up the diagonal correctly on arbitrarily long extensions of each fixed opponent-program prefix. For linear SAT the encoded lengths of the nested calls impose additional logarithmic factors. A recursive Boolean oracle, even with its canonical multilinear extension available to the source machine, makes native alternating linear time deterministic in the specified oracle model. A proof transferring to that model cannot give the separation. [Reviewed master theorem](computation-history-theorem.md) · [Exponent frontier](inverse-snapshot-frontier.md) · [Speedup criterion](alternating-native-speedup.md) · [Mixed-oracle construction](multilinear-oracle-clock.md)
+
+## Can two separate proof strategies be checked together?
+
+For the actual signed computation there is a free game with $O(\sqrt{\log M})$ random bits and total work $M/2^{\Omega(\sqrt{\log M})}$. A perfect honest strategy comes from one PCP proof. Its explicit lists over all left questions already occupy at least the native clock on the padded layout. Telling Bob the left question gives an exact new criterion: he and Alice can answer perfectly if and only if each entire left block of PCP tests can be satisfied separately. Producing an inconsistent block on false claims in a suitable PCP would suffice for the linear-time attack. An extra verifiable mode on the very same predicate defeats this criterion for every block by leaking one bit. The open question concerns the structure of a particular proof encoding and its strategies. [Native protocol and exact criterion](low-randomness-free-winner.md) · [Conditional removal of the public slope](affine-line-proof-game.md) · [Training one small-answer strategy](trained-free-games.md) · [Gap-free affine specialization](affine-game-panels.md)
 
 ## Can a short proof identify either of two losing ranks?
 
@@ -37,6 +43,10 @@ The sharp register-history example gives an unconditional reason to retire a can
 The prefix strategy test has a different requirement. It needs a verifiable strategy for the correct verdict within the specified power saving on a high-clock diagonal. A fast proof for even one padding in each opponent cylinder has yet to be constructed. [Fast solver and sharp table bound](scan-time-register-complexity.md) · [All-permutation positive family](word-permutation-positive-histories.md) · [High-clock strategy budgets](strategy-dag-certificates.md) · [Constructive padding test and escaping program](padded-game-separation.md)
 
 ## A superlinear SAT theorem for a restricted memory geometry
+
+Three pages already preclude the all-graphs segregator strategy. A butterfly route fixes one target bit per layer and has uniformly bounded congestion on the three-page layout even after its whole spine is inserted. This gives a proof from counting, independent of the monotone expander construction below. The remaining machine-specific quantifier requires control of an appropriate machine for each language. [Sharp two/three-page threshold](three-page-segregators.md)
+
+A longer alternation trade establishes a stronger mixed-tape quintic. For a planar tape with $T^{1/4+o(1)}$ scratch words its root lies between $1.082755$ and $1.082756$. A separate theorem allows several writable heads with cached scanned values and bounds the charge for their movement. [Mixed-tape schedule](mixed-tape-williams-schedule.md) · [Multi-head simulation](coupled-tape-sat.md)
 
 An independent check confirms both the proposed square root and the stronger iteration. A further version charges $P=\sum_a\min(r_a,w_a)$ on the extra scratch, with $r_a,w_a$ the native read and write counts at an address. On a planar tape it excludes time $O(N^{11/10})$ together with $P=O(T^{4/5})$. The proof authenticates changes or incoming reads separately at each address. At linear time it excludes $P=O(N/\log^A N)$ for some fixed $A$, even with the extra tape. A full RAM may have $P=\Theta(T)$. [Proof and scope](hybrid-scratch-read-write.md)
 
